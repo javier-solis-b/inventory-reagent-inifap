@@ -8,6 +8,9 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "icons": "^1.0.0",
+    "material": "^0.9.11",
+    "material-icons": "^1.13.12",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
