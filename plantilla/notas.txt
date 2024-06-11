@@ -1,0 +1,2 @@
+  background: #7ce9a4;
+    background: linear-gradient(to right, #7de984, #7ce9a4);

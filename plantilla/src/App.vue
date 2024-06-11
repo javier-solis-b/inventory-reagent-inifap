@@ -1,5 +1,5 @@
 <template>
-  <NavComp/>
+
   <router-view/>
 </template>
 
