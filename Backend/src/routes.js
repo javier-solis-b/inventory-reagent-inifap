@@ -1,5 +1,6 @@
 import express, { response } from 'express';
 import {User} from './Users/Models/User.js';
+import { PasswordService } from './auth/Services/PasswordService.js';
 
 const router = express.Router()
 
@@ -17,7 +18,7 @@ router.post('/api/v1/usuarios', async (request, response) => {
 
         const user = await User.create({
             name: name,
-            password: password
+            password: await PasswordService.encrypt(password)
         });
 
         console.log(user);
