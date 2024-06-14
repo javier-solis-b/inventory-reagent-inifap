@@ -6,6 +6,15 @@ POST http://localhost:3000/api/v1/usuarios HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "unach1",
-    "password": "soap2"
+    "name": "unach6",
+    "password": "soap6"
+}
+
+###
+POST http://localhost:3000/api/v1/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "unach4",
+    "password": "soap4"
 }

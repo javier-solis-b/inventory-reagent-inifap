@@ -1,8 +1,7 @@
 import { User } from '../Models/User.js';
 import { PasswordService } from '../../auth/Services/PasswordService.js';
 
-export  const createUserController = async (request, response) => {
-
+export const createUserController = async (request, response) => {
     const { name, password } = request.body;
 
     const user = await User.create({
@@ -10,7 +9,6 @@ export  const createUserController = async (request, response) => {
         password: await PasswordService.encrypt(password)
     });
 
-    console.log(user);
-    response.json(user);
+    console.log("¡Usuario creado exitosamente!");
 
 }
