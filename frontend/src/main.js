@@ -3,8 +3,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
-import UserIndexPage from './components/users/pages/UserIndexPage.vue'; // Asegúrate de que esta ruta sea correcta
-
+import DashboardView from '@/users/components/pages/DashboardView.vue'; 
+import '@/assets/global.css'
 loadFonts();
 
 const router = createRouter({
@@ -13,7 +13,7 @@ const router = createRouter({
     {
       path: '/usuarios', // Corrección aquí: añade una barra al principio
       name: 'users',
-      component: UserIndexPage, // Usa UserIndexPage directamente
+      component: DashboardView, // Usa UserIndexPage directamente
     },
   ],
 });
