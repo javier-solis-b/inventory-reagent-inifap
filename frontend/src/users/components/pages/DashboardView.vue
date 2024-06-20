@@ -70,12 +70,10 @@
 </template>
 
 <script>
+//import { UserService } from "@/users/services/UserService";
 export default {
-
-  mounted (){
-    console.log()
+  async mounted() {
+    console.log();
   }
-
-  
 };
 </script>
