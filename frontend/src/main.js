@@ -5,6 +5,8 @@ import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import DashboardView from '@/users/components/pages/DashboardView.vue'; 
 import '@/assets/global.css';
+import "@/assets/bootstrap.min.css";
+import UsersView from '@/users/components/pages/UsersView.vue';
 
 loadFonts();
 
@@ -14,14 +16,19 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/usuarios', // Corrección aquí: añade una barra al principio
-      name: 'users.index',
+      path: '/dashboard', // Corrección aquí: añade una barra al principio
+      name: 'dashboard',
       component: DashboardView, // Usa UserIndexPage directamente
     },
     {
-      path: '/login', // Corrección aquí: añade una barra al principio
+      path: '/login', 
       name: 'login',
-      component: LoginView, // Usa UserIndexPage directamente
+      component: LoginView, 
+    },
+    {
+      path: '/usuarios', 
+      name: 'usuarios',
+      component: UsersView, 
     }
   ],
 })

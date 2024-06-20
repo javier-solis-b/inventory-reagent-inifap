@@ -1,14 +1,15 @@
 <template>
-  <label for="user" class="form-label">Usuario:</label>
-  <v-text-field v-model="name"></v-text-field>
-  <label for="password" class="form-label">Contraseña:</label>
-  <v-text-field type="password" v-model="password"></v-text-field>
-  <v-btn v-on:click="onLogin()">Iniciar sesión</v-btn>
+  <div>
+    <label for="user" class="form-label">Usuario:</label>
+    <v-text-field v-model="name"></v-text-field>
+    <label for="password" class="form-label">Contraseña:</label>
+    <v-text-field type="password" v-model="password"></v-text-field>
+    <v-btn v-on:click="onLogin()">Iniciar sesión</v-btn>
+  </div>
 </template>
-  
-  <script>
+
+<script>
 import { AuthService } from "@/auth/services/AuthService.js";
-//import DashboardViewVue from "@/users/components/pages/DashboardView.vue";
 
 export default {
   data() {
@@ -22,10 +23,9 @@ export default {
       const response = await AuthService.login(this.name, this.password);
 
       if (response.token) {
-        this.$router.push({ name: 'users.index'});
+        this.$router.push({ name: 'dashboard'});
       }
     },
   },
 };
 </script>
-  

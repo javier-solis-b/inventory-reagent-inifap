@@ -19,7 +19,7 @@
           </div>
          
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            <button type="submit" class="iniciarsesion">Iniciar sesión</button>
           </div>
           <div class="my-3">
             <span>¿Olvidaste tu contraseña? <a href="#">Recupérala</a></span>
@@ -36,5 +36,11 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+.iniciarsesion{
+  background-color: #90ee90; /* Color de fondo del botón */
+  color:black; /* Color del texto del botón */
+  border-color: #90ee90; /* Color del borde del botón */
 }
 </style>
