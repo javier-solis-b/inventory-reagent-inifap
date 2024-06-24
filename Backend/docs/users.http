@@ -1,13 +1,13 @@
 GET http://localhost:3000/api/v1/usuarios HTTP/1.1
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjNzJiNmExMi0zZmI2LTQyN2EtOWQzYi0zYTJjYmQzNjVjOGIiLCJpYXQiOjE3MTkyNTgyNDIsImV4cCI6MTcxOTI2MTg0Mn0.Ix0Gjg5a4dA-d2aEf4wRbQQzmUh26ZwWW79OM79D4R4
 ###
 
 POST http://localhost:3000/api/v1/usuarios HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "unach7",
-    "password": "soap7"
+    "name": "prueba",
+    "password": "prueba"
 }
 
 ###
@@ -15,6 +15,6 @@ POST http://localhost:3000/api/v1/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "admin",
-    "password": "admin"
+    "name": "admin1",
+    "password": "admin1"
 }
