@@ -16,7 +16,7 @@ export const loginController = async (request, response) => {
         return response.status(401).json({ mesage: 'Los datos ingresados son incorrectos' });
     }
 
-    const token = jwt.sign({ userId: user.id }, env('JWT_SECRET_KEY'), { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, env('JWT_SECRET_KEY'), { expiresIn: '1m' });
 
     const jsonResponse = {
         message: "¡Usuario logueado correctamente!",

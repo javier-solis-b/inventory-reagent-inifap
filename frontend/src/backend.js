@@ -1,8 +1,20 @@
 import axios from "axios";
 import { API_BASE_URL } from "./config";
+import { TokenService } from "./auth/services/TokenService";
 
-const instance  = axios.create({
+const backend  = axios.create({
     baseURL: API_BASE_URL
 });
 
-export default instance;
+backend.interceptors.request.use((config) => {
+    const token = TokenService.get();
+
+    if(token){
+        config.headers.Authorization = token;
+    }
+
+    console.log('🔴token', token); 
+    return config; 
+})
+
+export default backend;
