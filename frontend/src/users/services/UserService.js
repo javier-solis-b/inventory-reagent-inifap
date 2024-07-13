@@ -2,8 +2,8 @@ import backend from '@/backend'
 
 export class UserService{
 
-    static all(){
-       return  backend.get('usuarios');
+    static async all(){
+       return ((await backend.get('usuarios'))).data ?? [];
     }
 
 }
