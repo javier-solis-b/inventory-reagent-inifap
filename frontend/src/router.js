@@ -2,7 +2,8 @@ import UsersView from '@/users/components/pages/UsersView.vue';
 import DashboardView from '@/users/components/pages/DashboardView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/auth/components/pages/LoginView.vue';
-import { verifyTokenInterceptor } from './auth/interceptors/verifyTokenInterceptor';
+import UnAuthorizedPage from '@/auth/components/pages/UnAuthorizedPage.vue';
+import { verifyTokenMiddleware } from './auth/middlewares/verifyTokenMiddleware.js'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,10 +24,15 @@ const router = createRouter({
         name: 'usuarios',
         component: UsersView,
         meta: { requireAuth: true }
+      },
+      {
+        path: '/403',
+        name: '403',
+        component: UnAuthorizedPage
       }
     ],
   });
 
-  router.beforeEach(verifyTokenInterceptor);
+  router.beforeEach(verifyTokenMiddleware);
 
   export {router};

@@ -1,6 +1,9 @@
 GET http://localhost:3000/api/v1/usuarios HTTP/1.1
 
 ###
+GET http://localhost:3000/api/v1/token/verify HTTP/1.1
+Authorization: 
+
 
 ###
 POST http://localhost:3000/api/v1/usuarios HTTP/1.1
