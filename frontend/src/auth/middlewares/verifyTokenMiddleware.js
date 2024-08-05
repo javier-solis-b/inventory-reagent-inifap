@@ -21,7 +21,7 @@ export const verifyTokenMiddleware = async (to, from, next) => {
 
     console.log("🟢 response", response);
 
-    if(!response.data.response){
+    if(!response.data.data.response){
       next({name: '403'});
     }
   

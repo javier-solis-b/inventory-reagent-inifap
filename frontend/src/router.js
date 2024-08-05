@@ -1,9 +1,11 @@
-import UsersView from '@/users/components/pages/UsersView.vue';
-import DashboardView from '@/users/components/pages/DashboardView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { verifyTokenMiddleware } from  './auth/middlewares/verifyTokenMiddleware.js'
+
+import UsersView from '@/users/components/pages/UsersView.vue';
+import CreateUsersView from '@/users/components/pages/CreateUsersView.vue';
+import DashboardView from '@/users/components/pages/DashboardView.vue';
 import LoginView from '@/auth/components/pages/LoginView.vue';
 import UnAuthorizedPage from '@/auth/components/pages/UnAuthorizedPage.vue';
-import { verifyTokenMiddleware } from './auth/middlewares/verifyTokenMiddleware.js'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,15 +17,21 @@ const router = createRouter({
         meta: { requireAuth: true }
       },
       {
-        path: '/login',
-        name: 'login',
-        component: LoginView,
-      },
-      {
         path: '/usuarios',
         name: 'usuarios',
         component: UsersView,
         meta: { requireAuth: true }
+      },
+      {
+        path: '/usuarios/crear',
+        name: 'usuarios.create',
+        component: CreateUsersView,
+        meta: { requireAuth: true }
+      },
+      {
+        path: '/login',
+        name: 'login',
+        component: LoginView,
       },
       {
         path: '/403',

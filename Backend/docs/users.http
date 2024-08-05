@@ -2,7 +2,7 @@ GET http://localhost:3000/api/v1/usuarios HTTP/1.1
 
 ###
 GET http://localhost:3000/api/v1/token/verify HTTP/1.1
-Authorization: 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjNzJiNmExMi0zZmI2LTQyN2EtOWQzYi0zYTJjYmQzNjVjOGIiLCJpYXQiOjE3MjE3MDExNjUsImV4cCI6MTcyMTcwNDc2NX0.Ign3sc0y3_L8s_Uyg_g4nFoBINi8y8Bh2llnpeeJVxs
 
 
 ###
