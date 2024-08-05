@@ -18,6 +18,10 @@ const User = sequelize.define('users', {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        isAdmin: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
     
     }, {timestamps: false});
 
