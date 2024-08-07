@@ -17,7 +17,7 @@
                 </v-col>
                 <v-col cols="12">
                     <v-btn type="submit" color="primary">
-                        Crear usuario
+                        Crear usuario.
                     </v-btn>
                 </v-col>
             </v-row>
