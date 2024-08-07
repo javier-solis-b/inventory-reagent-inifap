@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize"
 const sequelize = new Sequelize(
     'sigires_bd',
     'root',
-    '0309',
+    'pao1234',
     {
         host: 'localhost',
         dialect: 'mysql'

@@ -1,6 +1,6 @@
 import express from 'express';
-import { indexUserController } from './Users/Controllers/IndexUserController.js';
-import { createUserController } from './Users/Controllers/CreateUserController.js';
+import { indexUserController } from './Users/Controllers/indexUserController.js';
+import { createUserController } from './Users/Controllers/createUserController.js';
 import { loginController } from './auth/Controllers/loginController.js';
 import { deleteController } from './auth/Controllers/deleteController.js';
 import { verifyTokenController  } from './auth/Controllers/verifyTokenController.js';
