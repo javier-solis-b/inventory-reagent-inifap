@@ -22,7 +22,7 @@
       <v-row>
         <v-col cols="6">
           <v-btn style="width: 100%" v-on:click="onDeleteUser">
-            Eliminar.
+            Eliminar
           </v-btn>
         </v-col>
         <v-col cols="6">
