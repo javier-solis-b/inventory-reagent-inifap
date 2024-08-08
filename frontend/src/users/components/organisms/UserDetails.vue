@@ -34,22 +34,19 @@
 </template>
 
 <script>
-// Importa el módulo backend para realizar llamadas HTTP al servidor
 import backend from '@/backend';
+import Swal from 'sweetalert2'; 
 
-// Exporta el componente Vue.js
 export default {
   // Define las props que el componente espera recibir
   props: {
-    // Propiedad que contiene la información del usuario
-    user: Object,
+    user: Object, // Propiedad que contiene la información del usuario
   },
 
   // Función que devuelve el estado inicial de las variables reactivas del componente
   data() {
     return {
-      // Variable que controla si el componente debe mostrarse o no
-      display: true
+      display: true// Variable que controla si el componente debe mostrarse o no
     };
   },
 
@@ -57,12 +54,20 @@ export default {
   methods: {
     // Método asíncrono para eliminar al usuario
     async onDeleteUser() {
-      // Construye la URL para la solicitud de eliminación utilizando el id del usuario
-      // Utiliza backticks para permitir la interpolación de variables dentro de la cadena
-      await backend.delete(`usuarios/${this.user.id}`);
-      
-      // Oculta el componente una vez que el usuario ha sido eliminado
-      this.display = false; 
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Quieres eliminar al usuario ${this.user.name}?`,
+        icon: 'warning',
+        showCancelButton: true,
+      });
+
+      if (!result.isConfirmed){
+        return;
+      }
+      await backend.delete(`usuarios/${this.user.id}`);// Construye la URL para la solicitud de eliminación utilizando el id del usuario 
+      this.display = false; // Oculta el componente una vez que el usuario ha sido eliminado
+
+      Swal.fire('¡Usuario eliminado exitosamente!')
     },
   },
 };
