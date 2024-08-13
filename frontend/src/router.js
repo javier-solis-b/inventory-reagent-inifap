@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { verifyTokenMiddleware } from  './auth/middlewares/verifyTokenMiddleware.js'
+import { verifyTokenMiddleware } from './auth/middlewares/verifyTokenMiddleware.js'
 
 import UsersView from '@/users/components/pages/UsersView.vue';
 import CreateUsersView from '@/users/components/pages/CreateUsersView.vue';
@@ -7,17 +7,15 @@ import EditUsersView from '@/users/components/pages/EditUsersView.vue';
 import DashboardView from '@/users/components/pages/DashboardView.vue';
 import LoginView from '@/auth/components/pages/LoginView.vue';
 import UnAuthorizedPage from '@/auth/components/pages/UnAuthorizedPage.vue';
+import AuthLayout from '@/auth/components/layouts/AuthLayout.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-      {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: DashboardView,
-        meta: { requireAuth: true }
-      },
-      {
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      component: AuthLayout ,
+      children: [{
         path: '/usuarios',
         name: 'usuarios',
         component: UsersView,
@@ -34,20 +32,27 @@ const router = createRouter({
         name: 'usuarios.edit',
         component: EditUsersView,
         meta: { requireAuth: true }
-      },  
-      {
-        path: '/login',
-        name: 'login',
-        component: LoginView,
-      },
-      {
-        path: '/403',
-        name: '403',
-        component: UnAuthorizedPage
-      }
-    ],
-  });
+      }]
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+      meta: { requireAuth: true }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+    },
+    {
+      path: '/403',
+      name: '403',
+      component: UnAuthorizedPage
+    }
+  ],
+});
 
-  router.beforeEach(verifyTokenMiddleware);
+router.beforeEach(verifyTokenMiddleware);
 
-  export {router};
+export { router };

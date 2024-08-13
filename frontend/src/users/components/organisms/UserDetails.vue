@@ -26,7 +26,7 @@
           </v-btn>
         </v-col>
         <v-col cols="6">
-          <v-btn style="width: 100%"> Editar </v-btn>
+          <v-btn style="width: 100%" v-on:click="onEditUser"> Editar </v-btn>
         </v-col>
       </v-row>
     </v-card-actions>
@@ -69,6 +69,9 @@ export default {
 
       Swal.fire('¡Usuario eliminado exitosamente!')
     },
+    async onEditUser(){
+      this.$router.push({name: 'usuarios.edit', params: { id: this.user.id}});
+    }
   },
 };
  
