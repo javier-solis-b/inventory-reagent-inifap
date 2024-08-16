@@ -7,4 +7,8 @@ export class TokenService{
     static get(){
         return localStorage.getItem('token');
     }
+
+    static clear(){
+        return localStorage.removeItem('token');
+    }
 }

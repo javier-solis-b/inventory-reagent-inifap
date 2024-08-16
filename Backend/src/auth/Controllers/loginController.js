@@ -10,10 +10,14 @@ export const loginController = async (request, response) => {
         where: { name: name }
     });
 
+    if (!user) {
+        return response.status(401).json({ message: 'Usuario no existe' });
+    }
+
     const userExist = await PasswordService.check(password, user.password);
 
     if (!userExist) {
-        return response.status(401).json({ mesage: 'Los datos ingresados son incorrectos' });
+        return response.status(401).json({ message: 'Los contraseña es incorrecta' });
     }
 
     const token = jwt.sign({ userId: user.id }, env('JWT_SECRET_KEY'), { expiresIn: '1h' });

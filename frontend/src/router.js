@@ -32,13 +32,13 @@ const router = createRouter({
         name: 'usuarios.edit',
         component: EditUsersView,
         meta: { requireAuth: true }
-      }]
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardView,
-      meta: { requireAuth: true }
+      },
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: DashboardView,
+        meta: { requireAuth: true }
+      },]
     },
     {
       path: '/login',

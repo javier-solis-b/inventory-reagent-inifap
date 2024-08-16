@@ -4,6 +4,13 @@ import { PasswordService } from '../../auth/Services/PasswordService.js';
 export const createUserController = async (request, response) => {
     const { name, password, isAdmin } = request.body;
 
+    if(!name){
+        return response.status(401).json({message: 'Es necesario ingresar un nombre de usuario'})
+    }
+    if(!password){
+        return response.status(401).json({message: 'Es necesario ingresar una contraseña'})
+    }
+
     // Convertir isAdmin a un entero. Asumimos que isAdmin viene como '0' o '1'.
     const isAdminInt = parseInt(isAdmin, 10);
 
