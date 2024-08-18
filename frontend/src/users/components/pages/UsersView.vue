@@ -1,7 +1,7 @@
 <template>
   <div class="users-view">
     <v-row>
-    <v-col v-for="user in users" :key="user.id" cols="9" sm="10" md="6" lg="3">
+    <v-col v-for="user in users" :key="user.id" cols="10" sm="10" md="6" lg="6">
       <UserDetails :user="user"/>
     </v-col>
   </v-row>
@@ -33,7 +33,7 @@ export default {
   padding: 10px;
 
   .v-row {
-    margin-right: -10px; // Ajusta el margen derecho de la fila para compensar el margen izquierdo de las columnas
+    margin-right: -5px; // Ajusta el margen derecho de la fila para compensar el margen izquierdo de las columnas
     margin-left: -10px; // Ajusta el margen izquierdo de la fila para compensar el margen derecho de las columnas
   }
 

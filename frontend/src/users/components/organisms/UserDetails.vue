@@ -1,9 +1,8 @@
 <template>
-  <v-card v-if="display" class="elevation-0 pt-4 " cols="12">
+  <v-card v-if="display" class="elevation-0 pt-4" cols="12">
     <div class="d-flex" style="justify-content: center">
       <div
-        :style="`width: 150px; height: 150px; background: gray; border-radius: 50%;
-         background-image: url(/imagenes/admin.png); background-size: contain;`"
+        :style="responsiveStyle"
       ></div>
     </div>
     <v-card-title class="text-center" style="padding: 0">
@@ -27,7 +26,6 @@
       </v-row>
     </v-card-actions>
   </v-card>
-  
 </template>
 
 <script>
@@ -42,6 +40,18 @@ export default {
     return {
       display: true,
     };
+  },
+  computed: {
+    responsiveStyle() {
+      return {
+        width: '70px',
+        height: '70px',
+        background: 'gray',
+        borderRadius: '50%',
+        backgroundImage: 'url(/imagenes/admin.png)',
+        backgroundSize: 'contain',
+      };
+    },
   },
   methods: {
     async onDeleteUser() {

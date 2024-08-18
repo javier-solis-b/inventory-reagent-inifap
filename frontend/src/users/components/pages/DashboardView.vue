@@ -20,21 +20,13 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- <tr v-for="platillo in platillos" :key="platillo.id">
-                  <td>{{ platillo.id }}</td>
-                  <td>{{ platillo.nombre }}</td>
-                  <td>{{ formatCurrency(platillo.precio) }}</td>
-                  <td> -->
-                    <!-- <button class="btn btn-success btn-sm" @click="editarPlatillo(platillo)">Editar</button>
-                    <button class="btn btn-danger btn-sm" @click="eliminarPlatillo(platillo)">Eliminar</button> -->
-                  <!-- </td>
-                </tr> -->
+                <!-- Aquí irán las filas de la tabla -->
               </tbody>
             </table>
           </div>
         </div>
         <div class="card-footer">
-          <button class="btn btn-primary" @click="agregarAlmacen1">Agregar </button>
+          <button class="btn btn-primary" @click="agregarAlmacen1">Agregar</button>
           <button class="btn btn-success btn-sm" @click="editarAlmacen1(platillo)">Editar</button>
           <button class="btn btn-danger btn-sm" @click="eliminarAlmacen1(platillo)">Eliminar</button>
         </div>
@@ -44,20 +36,9 @@
 </template>
 
 <script setup>
-
-// const platillos = ref([
-//   { id: 1, nombre: 'Platillo 1', descripcion: 'Descripción del Platillo 1', precio: 10.99 },
-//   { id: 2, nombre: 'Platillo 2', descripcion: 'Descripción del Platillo 2', precio: 15.99 },
-//   { id: 3, nombre: 'Platillo 3', descripcion: 'Descripción del Platillo 3', precio: 8.99 },
-// ]);
-
-
-
 const agregarAlmacen1 = () => {
-  // Lógica para agregar un nuevo ....
+  // Lógica para agregar un nuevo elemento
 };
-
-
 </script>
 
 <style scoped>
@@ -131,4 +112,3 @@ const agregarAlmacen1 = () => {
   border-radius: 0.2rem;
 }
 </style>
-
