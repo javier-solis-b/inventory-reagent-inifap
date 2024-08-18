@@ -173,7 +173,7 @@ main {
 }
 
 h1 {
-  color: #fff;
+  color: #ffd700;
   font-size: 60px;
   font-weight: 900;
 }
@@ -184,7 +184,7 @@ h2 {
 }
 
 .description {
-  color: #fff;
+  color: #ffff;
   font-size: 24px;
   font-weight: 400;
 }
@@ -209,10 +209,6 @@ h2 {
   padding: 15px 40px !important;
   color: #fff !important;
   font-weight: 400 !important;
-}
-
-.links a {
-  color: #0c934a;
 }
 
 @media only screen and (max-width: 767px) {

@@ -5,6 +5,8 @@ import { loadFonts } from './plugins/webfontloader';
 import '@/assets/global.css';
 import "@/assets/bootstrap.min.css";
 import {router} from './router'
+import '@fortawesome/fontawesome-free/css/all.css'
+
 
 loadFonts();
 

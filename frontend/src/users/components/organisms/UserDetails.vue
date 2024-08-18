@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="display" class="elevation-0 pt-4">
+  <v-card v-if="display" class="elevation-0 pt-4 " cols="12">
     <div class="d-flex" style="justify-content: center">
       <div
         :style="`width: 150px; height: 150px; background: gray; border-radius: 50%;

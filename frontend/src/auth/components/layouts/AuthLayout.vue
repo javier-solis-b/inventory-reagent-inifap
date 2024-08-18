@@ -1,61 +1,83 @@
 <template>
-
-  <div >
-
-    <nav class="mb-4" style="display: flex; align-items:center">
-      <div style="flex: 1">
-        <h1>SIGIRES-INIFAP</h1>
-      </div>
-      <div v-on:click="toggleMenu" style=" background-image: url(/imagenes/admin.png); background-size: contain; cursor:pointer; border-radius: 50%; width: 50px; height: 50px ; position: relative; ">
-        <ul v-if="isActive" style=" list-style: none; background: white; position: absolute; top:100%; z-index:1; min-width: 300px; left:100%; transform: translateX(-300px) translateY(8px); box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius:16px">
-          <li style="padding:12px 20px">
-            Perfil
-          </li>
-          <li v-on:click="onLogout" style="padding:12px 20px">
-            Cerrar sesión
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <router-view></router-view>
+  <!-- Contenedor principal de la aplicación -->
+  <div class="app">
+    <!-- Componente de barra de navegación superior -->
+    <AppTopbar/>
+    <!-- Div que contiene el sidebar y el contenido principal -->
+    <div class="content">
+      <!-- Sidebar de la aplicación -->
+      <app-sidebar/>
+      <!-- Area principal donde se renderiza el contenido dinámico -->
+      <main >
+        <router-view/>
+      </main>
+    </div>
   </div>
-
-  
 </template>
 
-<script>
-import { TokenService } from '@/auth/services/TokenService';
-import Swal from 'sweetalert2'; 
-
-export default {
-  data() {
-    return {
-      isActive: false
-    };
-  },
-  methods: {
-    toggleMenu() {
-      this.isActive = !this.isActive;
-    },
-
-    async onLogout() {
-      const result = await Swal.fire({
-        title: '¿Estás seguro de cerrar sesión?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '<span style="color:white;">Sí, cerrar sesión</span>',
-        cancelButtonText: '<span style="color:white;">No</span>'
-        
-      });
-
-      if (result.isConfirmed) {
-        TokenService.clear(); // Limpia el token si el usuario confirma
-        this.$router.push({ name: 'login' }); // Redirecciona al login
-      }
-    }
-  }
-};
+<script setup>
+import AppSidebar from './AppSidebar.vue';
+import AppTopbar from './AppTopbar.vue';
 </script>
+
+<style lang="scss">
+/* Estilos SCSS */
+:root {
+  --light: #f1f5f9; // Color de fondo claro
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Fira Sans', sans-serif; // Fuente predeterminada
+}
+
+/* Estilo para el cuerpo de la página */
+body {
+  background-color: var(--light); // Aplica el color de fondo definido anteriormente
+}
+
+/* Estilo para botones */
+button {
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none; // Elimina el fondo predeterminado de los botones
+}
+
+/* Estilo para el contenedor principal de la aplicación */
+.app {
+  display: flex;
+  flex-direction: column; // Organiza los hijos en una columna
+  height: 100vh; // Asegura que el contenedor ocupe toda la altura de la ventana
+}
+
+/* Estilo para el contenido principal que incluye el sidebar y el área de contenido */
+.content {
+  display: flex;
+  flex-direction: row; // Organiza los hijos en una fila
+  flex-grow: 1; // Permite que el contenido principal crezca para llenar el espacio disponible
+}
+
+/* Estilo para el sidebar */
+.sidebar {
+ 
+  flex: 0 0 auto; // Evita que el sidebar cambie de tamaño
+}
+
+/* Estilo para el área de contenido principal */
+.main {
+ 
+  flex: 1 1 0; // Permite que el contenido principal crezca para ocupar el espacio restante
+  padding: 10rem; // Espaciado alrededor del contenido principal
+
+  /* Regla de medios para ajustar el espaciado en pantallas pequeñas */
+  @media (max-width: 968px) {
+    padding-left: 1rem; // Ajusta el espaciado a la izquierda en pantallas pequeñas
+  }
+}
+</style>
+
+
