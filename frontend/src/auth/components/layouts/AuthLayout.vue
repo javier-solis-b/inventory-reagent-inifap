@@ -38,20 +38,25 @@ import AppTopbar from './AppTopbar.vue';
   padding: 20px; /* Espaciado interno para el sidebar */
   flex-shrink: 0;
   overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es más grande */
+  
 }
 
 /* Estilo para el área de contenido principal */
 .main {
   flex: 1;
-  padding: 20px; /* Espaciado interno para el contenido principal */
-  background-color: #fff; /* Color de fondo para el contenido principal */
+  padding: 10px; /* Espaciado interno para el contenido principal */
+  margin: 10px;
+  background-color: var(--light); /* Color de fondo para el contenido principal */
   overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es más grande */
+  border-radius: 5px;
+  
 }
 
 /* Ajustes para pantallas pequeñas */
 @media (max-width: 768px) {
   .sidebar {
     width: 200px; /* Reduce el ancho del sidebar en pantallas pequeñas */
+  
   }
 }
 </style>

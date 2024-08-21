@@ -1,73 +1,81 @@
 <template>
-    <div>
-      <nav class="navbar mb-0" style="display: flex; align-items: center">
-       
-        <div style="flex: 1">
-          <h5
-            class="text-nav"
-            style="transform: translateX(10px) translateY(5px)"
-          >
-            SIGIRES-INIFAP
-          </h5>
-        </div>
-        <div
-          v-on:click="toggleMenu"
-          class="nav-edit"
+  <div>
+    <nav class="navbar mb-0" style="display: flex; align-items: center">
+      <div style="flex: 1">
+        <h5
+          class="text-nav"
+          style="transform: translateX(10px) translateY(5px)"
+        >
+          SIGIRES-INIFAP
+        </h5>
+      </div>
+      <div
+    
+        v-on:click="toggleMenu"
+        class="nav-edit"
+        style="
+          background-image: url(/imagenes/admin.png);
+          background-size: contain;
+          cursor: pointer;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          position: relative;
+          transform: translateX(-20px) translateY(5px);
+        "
+      >
+        <ul 
+          v-if="isActive"
           style="
-            background-image: url(/imagenes/admin.png);
-            background-size: contain;
-            cursor: pointer;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            position: relative;
-            transform: translateX(-20px) translateY(5px);
+            list-style: none;
+            background: white;
+            position: absolute;
+            top: 100%;
+            z-index: 1;
+            min-width: 300px;
+            left: 100%;
+            transform: translateX(-300px) translateY(8px);
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border-radius: 16px;
           "
         >
-          <ul
-            v-if="isActive"
-            style="
-              list-style: none;
-              background: white;
-              position: absolute;
-              top: 100%;
-              z-index: 1;
-              min-width: 300px;
-              left: 100%;
-              transform: translateX(-300px) translateY(8px);
-              box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-              border-radius: 16px;
-            "
-          >
-            <li style="padding: 12px 20px">Perfil</li>
-            <li v-on:click="onLogout" style="padding: 12px 20px">
-              Cerrar sesión
-            </li>
-          </ul>
-        </div>
-      </nav>
-      
-     
+         
+          <li  v-on:click="onLogout" style="padding: 12px 20px">
+            Cerrar sesión
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
-  
-
-  
-  
-  
-  </template>
+</template>
   <script>
 import { TokenService } from "@/auth/services/TokenService";
 import Swal from "sweetalert2";
-
 
 export default {
   data() {
     return {
       isActive: false,
       isBarVisible: true, // Propiedad para controlar la visibilidad de la barra
+      
     };
   },
   methods: {
+    handleMouseEnter(event) {
+      const rect = this.$refs.iconContainer.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = event.clientX - centerX;
+      const dy = event.clientY - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance <= 10) {
+        this.isMenuActive = true;
+      }
+    },
+    handleMouseLeave() {
+      this.isMenuActive = false;
+    },
     toggleMenu() {
       this.isActive = !this.isActive;
     },
@@ -96,7 +104,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped >
+.nav-edit{
+  &:hover {
+    filter: brightness(130%); 
+
+        
+      }
+}
+
+
 .navbar {
   background-color: #0c934a;
   display: flex;
@@ -117,7 +134,6 @@ export default {
   z-index: 9999; /* Valor alto para asegurar que se muestre por encima de otros elementos */
 }
 
-/* Asegúrate de que el menú desplegable también tenga un z-index adecuado */
 .nav-edit ul {
   list-style: none;
   background: white;
@@ -130,6 +146,4 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 16px;
 }
-
-
 </style>

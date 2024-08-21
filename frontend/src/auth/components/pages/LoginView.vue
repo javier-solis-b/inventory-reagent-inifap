@@ -26,7 +26,7 @@
           <div class="row">
             <form @submit.prevent="handleFormSubmit" class="col-12 col-md-8 offset-md-2">
               <div class="form-group">
-                <input v-model="name" class="form-control" name="email" id="email" placeholder="Correo electrónico" required />
+                <input v-model="name" class="form-control" name="email" id="email" placeholder="Usuario" required />
               </div>
               <br />
               <div class="form-group">

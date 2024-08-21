@@ -15,7 +15,7 @@
         <span class="material-icons">home</span>
         <span class="text">Inicio</span>
       </router-link>
-      <router-link class="button" to="/usuarios/crear">
+      <router-link class="button" to="/">
         <span class="material-icons">warehouse</span>
         <span class="text">Almacenes</span>
       </router-link>
