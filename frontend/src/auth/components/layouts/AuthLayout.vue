@@ -59,4 +59,14 @@ import AppTopbar from './AppTopbar.vue';
   
   }
 }
+
+::-webkit-scrollbar{
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background: var(--primary);
+  border-radius: 10px;
+  height: 90px;
+}
 </style>

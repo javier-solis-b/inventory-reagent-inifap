@@ -2,7 +2,7 @@
   <div class="users-view">
     <div>
       <v-col class="encabezado  " style="margin: -10px;" cols="12">
-        <h2>Usuarios</h2>
+        <h3 class="fw-bold mb-3">Usuarios</h3>
       </v-col>
     </div>
     <v-row>

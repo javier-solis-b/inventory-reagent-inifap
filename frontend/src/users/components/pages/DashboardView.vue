@@ -1,114 +1,119 @@
 <template>
-  <div class="grid">
-    <div class="col-12 md:12">
-      <div class="card p-fluid">
-        <div class="card-body">
-          <h4 class="card-title">Inventario Almacén 1</h4>
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>No. de Inventario</th>
-                  <th>Nombre</th>
-                  <th>Marca</th>
-                  <th>Formula</th>
-                  <th>PM</th>
-                  <th>Capacidad del recipiente</th>
-                  <th>Recipientes actuales</th>
-                  <th>Lote</th>
-                  <th>Contenido aproximado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Aquí irán las filas de la tabla -->
-              </tbody>
-            </table>
+  <div class="container-fluid p-4 ">
+    <div class="row justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="fw-bold mb-0 text-color:#0c934a">Catálogos</h3>
+      </div>
+      <h6 class="text-muted">Selecciona una opción:</h6>
+    </div>
+    <div class="row text-center">
+      <!-- Tarjeta de Almacenes -->
+      <div class="col-sm-6 col-md-6 mb-4 " >
+        <div class="card h-100 shadow-sm border-30" >
+          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
+            <img src="/imagenes/almacen.png" alt="Almacenes" class="mb-3" width="50px" height="70px" />
+            <h4 class="card-title text-color: var(--primary-alt)">Almacenes</h4>
           </div>
         </div>
-        <div class="card-footer">
-          <button class="btn btn-primary" @click="agregarAlmacen1">Agregar</button>
-          <button class="btn btn-success btn-sm" @click="editarAlmacen1(platillo)">Editar</button>
-          <button class="btn btn-danger btn-sm" @click="eliminarAlmacen1(platillo)">Eliminar</button>
+      </div>
+      <!-- Fin card -->
+      <!-- Tarjeta de Refrigeradores -->
+      <div class="col-sm-6 col-md-6 mb-4 elevation">
+        <div class="card h-100 shadow-sm border-30">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
+            <img src="/imagenes/refrigerador.png" alt="Refrigeradores" class="mb-3" width="50px" height="70px" />
+            <h4 class="card-title text-color: var(--primary-alt)">Refrigeradores</h4>
+          </div>
         </div>
       </div>
+      <!-- Fin card -->
+      <!-- Tarjeta de Solventes -->
+      <div class="col-sm-6 col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-30">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
+            <img src="/imagenes/solvente.png" alt="Solventes" class="mb-3" width="50px" height="70px" />
+            <h4 class="card-title text-color: var(--primary-alt)">Solventes</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin card -->
+      <!-- Tarjeta de Usuarios -->
+      <div class="col-sm-6 col-md-6 mb-4" @click="navigateToUsers">
+        <div class="card h-100 shadow-sm border-30">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
+            <img src="/imagenes/usuario.png" alt="Usuarios" class="mb-3" width="50px" height="70px" />
+            <h4 class="card-title text-color: var(--primary-alt)">Usuarios</h4>
+          </div>
+        </div>
+      </div>
+      <!-- Fin card -->
+    </div>
+<br>
+    <div class="text-center ">
+      <h4 class="color: var(--primary)">SIGIRES INIFAP - CERI</h4>
     </div>
   </div>
 </template>
 
-<script setup>
-const agregarAlmacen1 = () => {
-  // Lógica para agregar un nuevo elemento
+<script>
+import WebFont from "webfontloader";
+
+export default {
+  name: "DashboardView",
+  mounted() {
+    WebFont.load({
+      google: { families: ["Public Sans:300,400,500,600,700"] },
+      custom: {
+        families: [
+          "Font Awesome 5 Solid",
+          "Font Awesome 5 Regular",
+          "Font Awesome 5 Brands",
+          "simple-line-icons",
+        ],
+        urls: ["assets/css/fonts.min.css"],
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      },
+    });
+  },
+  methods: {
+    navigateToUsers() {
+      this.$router.push('/usuarios');
+    }
+  }
 };
 </script>
 
-<style scoped>
-.table {
-  width: 100%;
-  margin-bottom: 1rem;
-  color: #212529;
-  border-collapse: collapse;
+<style lang="scss" scoped>
+
+body {
+  border-radius: 50px;
+  background-color: #f8f9fa;
 }
 
-.table th,
-.table td {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
+.card {
+ 
+  box-shadow: 10px 5px 5px red;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    transform: scale(0.9) ;
+    transition: 1s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
 }
 
-.table thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
+h3 {
+  color: var(--primary-alt);
 }
 
-.table tbody + tbody {
-  border-top: 2px solid #dee2e6;
+.card-title {
+  
+  color: #0c934a;
 }
 
-.table-sm th,
-.table-sm td {
-  padding: 0.3rem;
-}
 
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  color: #212529;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-success {
-  color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.btn-danger {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  border-radius: 0.2rem;
-}
 </style>

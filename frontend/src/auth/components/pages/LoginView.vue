@@ -3,7 +3,7 @@
     <main class="row">
       <section class="col-md-6" id="panel-left">
         <div class="col-12 logo-container d-flex flex-column justify-content-center align-items-center">
-          <h1 class="text-center">SIGIRES INIFAP</h1>
+          <h1 class="w-bold text-center">SIGIRES INIFAP</h1>
           <p class="col-12 text-center description mb-3">
             Bienvenido, al sistema de gestión <br />
             de inventarios de reactivos y soluciones.

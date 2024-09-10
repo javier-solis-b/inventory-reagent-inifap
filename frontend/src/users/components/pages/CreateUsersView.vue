@@ -9,7 +9,7 @@
         <span class="material-symbols-outlined"> arrow_back </span>
       </v-btn>
       <v-col class="encabezado" style="margin: -10px" cols="12">
-        <h2>Crear un nuevo usuario</h2>
+        <h3 class="fw-bold mb-3">Crear un nuevo usuario</h3>
       </v-col>
     </div>
     <v-card>
