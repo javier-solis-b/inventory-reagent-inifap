@@ -2,53 +2,24 @@
   <div>
     <nav class="navbar mb-0" style="display: flex; align-items: center">
       <div style="flex: 1">
-        <h5
-          class="text-nav"
-          style="transform: translateX(10px) translateY(5px)"
-        >
+        <h5 class="text-nav" style="transform: translateX(10px) translateY(5px)">
           SIGIRES-INIFAP
         </h5>
       </div>
-      <div
-    
-        v-on:click="toggleMenu"
-        class="nav-edit"
-        style="
-          background-image: url(/imagenes/admin.png);
-          background-size: contain;
-          cursor: pointer;
-          border-radius: 50%;
-          width: 30px;
-          height: 30px;
-          position: relative;
-          transform: translateX(-20px) translateY(5px);
-        "
-      >
-        <ul 
-          v-if="isActive"
-          style="
-            list-style: none;
-            background: white;
-            position: absolute;
-            top: 100%;
-            z-index: 1;
-            min-width: 300px;
-            left: 100%;
-            transform: translateX(-300px) translateY(8px);
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            border-radius: 16px;
-          "
-        >
-         
-          <li  v-on:click="onLogout" style="padding: 12px 20px">
-            Cerrar sesión
-          </li>
+      <div class="username" style="margin-right: 20px; margin-left: 20px; transform: translateX(-30px)">
+        <span>{{ username }}</span> <!-- Muestra el nombre del usuario -->
+      
+      </div>
+      <div v-on:click="toggleMenu" class="nav-edit" style="background-image: url(/imagenes/admin.png); background-size: contain; cursor: pointer; border-radius: 50%; width: 30px; height: 30px; position: relative; transform: translateX(-30px) translateY(0px);">
+        <ul v-if="isActive" style="list-style: none; background: white; position: absolute; top: 100%; z-index: 2; min-width: 300px; left: 100%; transform: translateX(-300px) translateY(8px); box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 16px;">
+          <li v-on:click="onLogout" style="padding: 10px 20px">Cerrar sesión</li>
         </ul>
       </div>
     </nav>
   </div>
 </template>
-  <script>
+
+<script>
 import { TokenService } from "@/auth/services/TokenService";
 import Swal from "sweetalert2";
 
@@ -56,8 +27,8 @@ export default {
   data() {
     return {
       isActive: false,
-      isBarVisible: true, // Propiedad para controlar la visibilidad de la barra
-      
+      isBarVisible: true,
+      username: localStorage.getItem('username') || '', // Recupera el nombre del usuario
     };
   },
   methods: {
@@ -80,9 +51,8 @@ export default {
       this.isActive = !this.isActive;
     },
     toggleBarVisibility() {
-      this.isBarVisible = !this.isBarVisible; // Alterna la visibilidad de la barra
+      this.isBarVisible = !this.isBarVisible;
     },
-
     async onLogout() {
       const result = await Swal.fire({
         title: "¿Estás seguro de cerrar sesión?",
@@ -90,30 +60,33 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText:
-          '<span style="color:white;">Sí, cerrar sesión</span>',
+        confirmButtonText: '<span style="color:white;">Sí, cerrar sesión</span>',
         cancelButtonText: '<span style="color:white;">No</span>',
       });
 
       if (result.isConfirmed) {
-        TokenService.clear(); // Limpia el token si el usuario confirma
-        this.$router.push({ name: "login" }); // Redirecciona al login
+        TokenService.clear();
+        localStorage.removeItem('username'); // Limpia el nombre del usuario
+        this.$router.push({ name: "login" });
       }
     },
   },
 };
 </script>
 
-<style lang="scss" scoped >
-.nav-edit{
+<style lang="scss" scoped>
+.nav-edit {
   &:hover {
-    filter: brightness(130%); 
-
-        
-      }
+    filter: brightness(130%);
+  }
 }
-
-
+.username {
+  align-items: center;
+  display: flex;
+  color: white !important;
+  margin-left: auto; /* Añadido para separar el nombre de usuario */
+  font-family: 'Roboto', sans-serif;
+}
 .navbar {
   background-color: #0c934a;
   display: flex;
@@ -123,7 +96,6 @@ export default {
 .text-nav {
   color: #ffd700 !important;
 }
-
 .navbar {
   background-color: #0c934a;
   display: flex;
@@ -133,7 +105,6 @@ export default {
   top: 0; /* Posicionamiento desde la parte superior */
   z-index: 9999; /* Valor alto para asegurar que se muestre por encima de otros elementos */
 }
-
 .nav-edit ul {
   list-style: none;
   background: white;

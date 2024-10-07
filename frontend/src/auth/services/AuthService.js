@@ -11,6 +11,8 @@ export class AuthService{
 
         const token = response.data.data.token;
         TokenService.set(token);
+        localStorage.setItem('username', name); // Guarda el nombre del usuario en localStorage
+        
         return response.data.data;
     
     }
