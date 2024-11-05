@@ -1,12 +1,12 @@
 import { User } from "../../Users/Models/User.js";
 
-export const deleteController = async(request, response) =>{
+export const deleteController = async (request, response) => {
     const userId = request.params.id;
 
     await User.destroy({
-        where:{
+        where: {
             id: userId
         }
     })
-   response.status(204).json({});
+    response.status(204).json({});
 }

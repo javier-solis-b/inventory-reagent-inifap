@@ -1,8 +1,11 @@
 <template>
   <div class="users-view">
+    <h3 class="fw-bold mb-0 text-color" style="color: #0c934a;">Usuarios</h3>
     <div>
+     
       <v-col class="encabezado  " style="margin: -10px;" cols="12">
-        <h3 class="fw-bold mb-3">Usuarios</h3>
+    
+
       </v-col>
     </div>
     <v-row>
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-import UserDetails from "../organisms/UserDetails.vue";
+import UserDetails from "../../organisms/UserDetails.vue";
 import { UserService } from "@/users/services/UserService.js";
 import Paginate from "vuejs-paginate-next";
 
@@ -99,8 +102,7 @@ export default {
 }
 
 .users-view {
-  margin: 10px;
-  padding: 10px;
+  
 
   .v-row {
     margin-right: -5px;

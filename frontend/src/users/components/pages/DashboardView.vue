@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid p-4 ">
+  <div class="container-fluid  ">
     <div class="row justify-content-between align-items-center mb-4">
       <div>
-        <h3 class="fw-bold mb-0 text-color:#0c934a">Catálogos</h3>
+        <h3 class="fw-bold mb-0 text-color" style="color: #0c934a;">Cátalagos</h3>
       </div>
       <h6 class="text-muted">Selecciona una opción:</h6>
     </div>

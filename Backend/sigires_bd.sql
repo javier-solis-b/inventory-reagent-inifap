@@ -1,5 +1,3 @@
-
-
 CREATE DATABASE sigires_bd;
 
 use sigires_bd
@@ -20,7 +18,7 @@ CREATE TABLE Almacen (
     Nombre_Almacen VARCHAR(255)
 );
 
---TTABLA DE REACTIVOS
+--TABLA DE REACTIVOS
 CREATE TABLE Cat_Reactivos (
     Id INT PRIMARY KEY,
     Nombre VARCHAR(255),

@@ -4,6 +4,10 @@
       href="https://fonts.googleapis.com/css?family=Material+Icons"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=bar_chart"
+    />
     <div class="menu-toggle-wrap">
       <button class="menu-toggle" @click="ToggleMenu">
         <span class="material-icons">keyboard_double_arrow_right</span>
@@ -15,19 +19,24 @@
         <span class="material-icons">home</span>
         <span class="text">Inicio</span>
       </router-link>
-      <router-link class="button" to="/">
+      <router-link class="button" to="/recursos">
+        <span class="material-icons">science</span>
+        <span class="text">Recursos</span>
+      </router-link>
+      <router-link class="button" to="/almacenes">
         <span class="material-icons">warehouse</span>
         <span class="text">Almacenes</span>
       </router-link>
       <router-link class="button" to="/">
-        <span class="material-icons">kitchen</span>
-        <span class="text">Refrigeradores</span>
+        <span class="material-icons">inventory_2</span>
+        <span class="text">Soluciones stock</span>
       </router-link>
       <router-link class="button" to="/">
-        <span class="material-icons">science</span>
-        <span class="text">Solventes</span>
+        <span class="material-icons"> bar_chart</span>
+        <span class="text">Reportes</span>
       </router-link>
-      <router-link class="button" to="/usuarios">
+      <!-- Mostrar la opción de Usuarios solo si el usuario es administrador -->
+      <router-link v-if="isAdmin" class="button" to="/usuarios">
         <span class="material-icons">group</span>
         <span class="text">Usuarios</span>
       </router-link>
@@ -41,12 +50,18 @@ import { ref } from "vue";
 // Estado para controlar si la barra lateral está expandida o no
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
+// Obtener el estado de administrador desde localStorage
+const isAdmin = ref(localStorage.getItem("isAdmin") === "true");
+
 // Función para alternar el estado de la barra lateral
 const ToggleMenu = () => {
+  // Alternar el estado de expansión de la barra lateral
   is_expanded.value = !is_expanded.value;
+  // Guardar el estado de expansión en localStorage
   localStorage.setItem("is_expanded", is_expanded.value);
 };
 </script>
+
 
 <style lang="scss" scoped>
 aside {
@@ -87,7 +102,8 @@ aside {
     }
   }
 
-  h3, .button .text {
+  h3,
+  .button .text {
     opacity: 0; // Ocultar texto cuando no está expandido
     transition: opacity 0.3s ease-in-out;
   }
@@ -123,7 +139,8 @@ aside {
       &:hover {
         background-color: var(--dark-alt);
 
-        .material-icons, .text {
+        .material-icons,
+        .text {
           color: var(--primary);
         }
       }
@@ -132,7 +149,8 @@ aside {
         background-color: var(--dark-alt);
         border-right: 5px solid var(--primary);
 
-        .material-icons, .text {
+        .material-icons,
+        .text {
           color: var(--primary);
         }
       }
@@ -160,7 +178,8 @@ aside {
       }
     }
 
-    h3, .button .text {
+    h3,
+    .button .text {
       opacity: 1; // Mostrar texto cuando está expandido
     }
 
@@ -170,15 +189,11 @@ aside {
       }
     }
 
-  
     @media (max-width: 1024px) {
-    position: absolute;
-    z-index: 100;
-    width: 200px;
+      position: absolute;
+      z-index: 100;
+      width: 200px;
+    }
   }
-  }
- 
-
-  
 }
 </style>

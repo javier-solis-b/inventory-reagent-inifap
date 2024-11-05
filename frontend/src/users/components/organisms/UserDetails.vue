@@ -14,7 +14,7 @@
       {{ user.name ?? "" }}
     </v-card-title>
     <v-card-subtitle class="text-center">
-      {{ user.isAdmin == 1 ? "Administrador 🟢" : "No administrador⚫" }}
+      {{ user.isAdmin == 1 ? "Administrador 🟢" : "No es administrador⚫" }}
     </v-card-subtitle>
     <v-card-actions>
       <v-row>

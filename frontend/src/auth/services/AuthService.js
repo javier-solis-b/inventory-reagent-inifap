@@ -1,19 +1,19 @@
 import backend from '@/backend.js';
-import {TokenService} from './TokenService.js';
+import { TokenService } from './TokenService.js';
 
-export class AuthService{
-    
-    static async login(name, password){
-        const response = await backend.post("login", {
-            name,
-            password
-        });
+export class AuthService {
+  static async login(name, password) {
+    const response = await backend.post("login", {
+      name,
+      password
+    });
 
-        const token = response.data.data.token;
-        TokenService.set(token);
-        localStorage.setItem('username', name); // Guarda el nombre del usuario en localStorage
-        
-        return response.data.data;
-    
-    }
+    const token = response.data.data.token;
+    const isAdmin = response.data.data.isAdmin; // Suponiendo que el backend devuelve esta información
+    TokenService.set(token);
+    localStorage.setItem('username', name);
+    localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false'); // Guarda el estado de administrador en localStorage
+    return response.data.data;
+  }
 }
+
