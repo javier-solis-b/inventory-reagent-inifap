@@ -137,7 +137,7 @@ export default {
     return {
       recurso: {
         id: "",
-        catalogo_id: null,
+        catalogo_id: "",
         no_inventario: "",
         nombre: "",
         tipo_recurso: "",
@@ -162,7 +162,7 @@ export default {
       try {
         const catalogos = await AlmacenService.all();
         this.catalogos = catalogos.map((catalogo) => ({
-          value: catalogo.catalogo_id,
+          value: catalogo.id,
           text: `${catalogo.id} - ${catalogo.nombre_almacen}`,
         }));
       } catch (error) {
@@ -193,39 +193,7 @@ export default {
         });
       }
     },
-    async cambiarCatalogo(catalogoSeleccionado) {
-      try {
-        const catalogoId = parseInt(catalogoSeleccionado.value); // Obtenemos solo el ID numérico
-        if (!isNaN(catalogoId)) {
-          // Verificamos si es un número válido
-          this.recurso.catalogo_id = catalogoId;
-
-          // Actualizamos solo el campo catalogo_id en la API
-          await backend.put(`recursos/${this.recurso.id}`, {
-            catalogo_id: catalogoId,
-          });
-
-          // Carga nuevamente el recurso para reflejar los cambios
-          await this.cargarRecurso();
-        } else {
-          console.error("No se seleccionó un catálogo válido.");
-          Swal.fire({
-            icon: "error",
-            title: "Error al cambiar el catálogo",
-            text: "Por favor, seleccione un catálogo válido.",
-            confirmButtonText: '<span style="color:white;">OK</span>',
-          });
-        }
-      } catch (error) {
-        console.error("Error al cambiar el catálogo:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error al cambiar el catálogo",
-          text: "Hubo un problema al cambiar el catálogo. Por favor, inténtelo de nuevo.",
-          confirmButtonText: '<span style="color:white;">OK</span>',
-        });
-      }
-    },
+    
     async onSubmit() {
       try {
         if (!this.recurso.id) {
