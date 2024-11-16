@@ -2,14 +2,13 @@ import { Recurso } from '../Models/Recursos.js'; // Asegúrate de importar el mo
 
 
 export const createRecursoController = async (request, response) => {
-    const {  catalogo_id, nombre,tipo_recurso, no_inventario, marca, pm, formula, capacidad_r, lote, recipientes_actuales } = request.body;
+    const {  catalogo_id, nombre,tipo_recurso, no_inventario, marca, pm, formula, capacidad_r,unidad_medida, lote,fecha_caducidad, recipientes_actuales } = request.body;
 
-    if(!nombre || !tipo_recurso || !no_inventario || !marca || !formula || !capacidad_r|| !lote|| !recipientes_actuales  ) {
+    if(!nombre || !tipo_recurso || !no_inventario || !marca || !formula || !capacidad_r||!unidad_medida || !lote|| !recipientes_actuales  ) {
         return response.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
     const resource = await Recurso.create({
-        
         nombre: nombre,
         tipo_recurso: tipo_recurso,
         no_inventario: no_inventario,
@@ -19,7 +18,10 @@ export const createRecursoController = async (request, response) => {
         capacidad_r: capacidad_r,
         lote: lote,
         recipientes_actuales: recipientes_actuales,
-        catalogo_id: catalogo_id
+        catalogo_id: catalogo_id,
+        unidad_medida: unidad_medida,
+        fecha_caducidad: fecha_caducidad
+
     });
 
     console.log("¡Recurso creado exitosamente!");
@@ -34,6 +36,7 @@ export const createRecursoController = async (request, response) => {
         pm: resource.pm,
         formula: resource.formula,
         capacidad_r: resource.capacidad_r,
+        unidad_medida: resource.unidad_medida,
         lote: resource.lote,
         recipientes_actuales: resource.recipientes_actuales,
         catalogo_id: resource.catalogo_id

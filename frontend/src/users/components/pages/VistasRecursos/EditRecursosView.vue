@@ -116,7 +116,29 @@
               required
             ></v-text-field>
           </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-select
+              v-model="recurso.unidad_medida"
+               :items="['kg', 'g', 'mg', 'L', 'ml']"
+              label="Unidad de medida"
+              variant="underlined"
+              prepend-icon="mdi-ruler-square"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-text-field
+              variant="underlined"
+              v-model="recurso.fecha_caducidad"
+              label="Fecha de caducidad"
+              type="date"
+              prepend-icon="mdi-calendar-range"
+              required
+            ></v-text-field>
+           
+          </v-col>
         </v-row>
+        <p class="text-danger mt-1">Recuerda agregar nuevamente la fecha de caducidad para poder editar cualquier campo, de otra forma no será posible actualizar nigun campo.</p>
         <v-row justify="start" align="center" class="mt-4">
           <v-col cols="auto">
             <v-btn type="submit" color="primary">{{ submitText }}</v-btn>
@@ -126,7 +148,6 @@
     </v-card>
   </v-form>
 </template>
-
 <script>
 import backend from "@/backend.js";
 import Swal from "sweetalert2";
@@ -147,11 +168,18 @@ export default {
         capacidad_r: "",
         lote: "",
         recipientes_actuales: "",
+        unidad_medida: "",
+        fecha_caducidad: null,
       },
       catalogos: [],
       formTitle: "Editar Recurso",
       submitText: "Actualizar",
     };
+  },
+  computed: {
+    mostrarAdvertencia() {
+      return !this.recurso.fecha_caducidad;
+    }
   },
   async mounted() {
     await this.cargarCatalogos();
@@ -180,8 +208,12 @@ export default {
         const recursoData = (
           await backend.get(`recursos/${this.$route.params.id}`)
         ).data;
+        
+        // Aseguramos que los campos específicos estén presentes en el recursoData
         this.recurso = {
           ...recursoData,
+          unidad_medida: recursoData.unidad_medida || '',
+          fecha_caducidad: new Date(recursoData.fecha_caducidad),
         };
       } catch (error) {
         console.error("Error al cargar el recurso:", error);
@@ -193,9 +225,9 @@ export default {
         });
       }
     },
-    
     async onSubmit() {
       try {
+        await this.verificarFechaCaducidad();
         if (!this.recurso.id) {
           const newRecurso = await backend.post("recursos", this.recurso);
           this.$router.push({
@@ -226,9 +258,24 @@ export default {
         });
       }
     },
+    verificarFechaCaducidad() {
+      if (!this.recurso.fecha_caducidad) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Recuerda agregar nuevamente la fecha de caducidad para poder editar cualquier campo.',
+          confirmButtonText: '<span style="color:white;">OK</span>',
+        });
+      }
+    },
+    cambiarCatalogo() {
+      this.recurso.catalogo_id = this.catalogos.find(c => c.value === this.recurso.catalogo_id)?.text || '';
+    }
   },
 };
 </script>
+
+
 
 <style scoped>
 .material-symbols-outlined {

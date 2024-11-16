@@ -99,6 +99,16 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="4">
+            <v-select
+              v-model="unidad_medida"
+              :items="unidadesMedida"
+              label="Unidad de medida"
+              variant="underlined"
+              prepend-icon="mdi-ruler-square"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
             <v-text-field
               variant="underlined"
               v-model="recipientes_actuales"
@@ -117,6 +127,17 @@
               required
             ></v-text-field>
           </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-text-field
+              variant="underlined"
+              v-model="fecha_caducidad"
+              label="Fecha de caducidad"
+              type="date"
+              prepend-icon="mdi-calendar-range"
+              required
+            ></v-text-field>
+          </v-col>
+          
         </v-row>
         <v-row justify="start" align="center" class="mt-4">
           <v-col cols="auto">
@@ -149,6 +170,9 @@ export default {
       catalogos: [],
       nombre_almacen: "",
       catalogo_id: null,
+      fecha_caducidad: null,
+      unidad_medida: '',
+      unidadesMedida: ['kg', 'g', 'mg', 'L', 'ml'],
     };
   },
   async mounted() {
@@ -178,9 +202,9 @@ export default {
       this.catalogo_id = event.target.value;
     },
     onChangeCatalogo(value) {
-    console.log("Valor seleccionado:", value);
-    this.catalogo_id = value; // Ya es el valor numérico
-  },
+      console.log("Valor seleccionado:", value);
+      this.catalogo_id = value; // Ya es el valor numérico
+    },
     async onSubmit() {
       if (!this.nombre || !this.tipo_recurso || !this.no_inventario) {
         Swal.fire({
@@ -201,6 +225,7 @@ export default {
         });
         return;
       }
+      
       try {
         const id = uuidv4(); // Genera un ID UUID
         const response = await backend.post("recursos", {
@@ -215,15 +240,17 @@ export default {
           lote: this.lote,
           recipientes_actuales: parseInt(this.recipientes_actuales),
           catalogo_id: parseInt(this.catalogo_id),
+          fecha_caducidad: this.fecha_caducidad ? new Date(this.fecha_caducidad).toISOString().split('T')[0] : null,
+          unidad_medida: this.unidad_medida,
         });
-        console.log(response.data);
 
         console.log(response.data);
+        
         Swal.fire({
           icon: "success",
           title: "Recurso creado con éxito",
           text: "El recurso ha sido creado exitosamente.",
-          confirmButtonText: '<span style="color:white;">ok</span>',
+          confirmButtonText: '<span style="color:white;">OK</span>',
         });
 
         this.$router.push({ name: "recursos" });
@@ -236,10 +263,11 @@ export default {
           icon: "error",
           title: "Error al crear el recurso",
           text: "Hubo un problema al crear el recurso. Por favor, inténtalo de nuevo.",
-          confirmButtonText: '<span style="color:white;">ok</span>',
+          confirmButtonText: '<span style="color:white;">OK</span>',
         });
       }
     },
   },
 };
+
 </script>

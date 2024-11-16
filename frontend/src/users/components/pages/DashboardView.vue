@@ -1,66 +1,54 @@
 <template>
-  <div class="container-fluid  ">
-    <div class="row justify-content-between align-items-center mb-4">
-      <div>
-        <h3 class="fw-bold mb-0 text-color" style="color: #0c934a;">Cátalagos</h3>
+   <div class="container-fluid p-0">
+    <div class="row justify-content-center align-items-center mb-4">
+      <div class="col-auto">
+        <h3 class="fw-bold mb-0 text-color" style="color: #0c934a;">Inicio</h3>
       </div>
-      <h6 class="text-muted">Selecciona una opción:</h6>
     </div>
-    <div class="row text-center">
-      <!-- Tarjeta de Almacenes -->
-      <div class="col-sm-6 col-md-6 mb-4 " >
-        <div class="card h-100 shadow-sm border-30" >
-          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
-            <img src="/imagenes/almacen.png" alt="Almacenes" class="mb-3" width="50px" height="70px" />
-            <h4 class="card-title text-color: var(--primary-alt)">Almacenes</h4>
+
+    <!-- Gráficas -->
+    <div class="row justify-content-center">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-none bg-light rounded">
+          <div class="card-header">
+            <h5 class="mb-0">Gráfica de Almacenes</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="almacenChart"></canvas>
           </div>
         </div>
       </div>
-      <!-- Fin card -->
-      <!-- Tarjeta de Refrigeradores -->
-      <div class="col-sm-6 col-md-6 mb-4 elevation">
-        <div class="card h-100 shadow-sm border-30">
-          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
-            <img src="/imagenes/refrigerador.png" alt="Refrigeradores" class="mb-3" width="50px" height="70px" />
-            <h4 class="card-title text-color: var(--primary-alt)">Refrigeradores</h4>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-none bg-light rounded">
+          <div class="card-header">
+            <h5 class="mb-0">Distribución de Tipos de Recursos</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="tipoRecursoChart"></canvas>
           </div>
         </div>
       </div>
-      <!-- Fin card -->
-      <!-- Tarjeta de Solventes -->
-      <div class="col-sm-6 col-md-6 mb-4">
-        <div class="card h-100 shadow-sm border-30">
-          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
-            <img src="/imagenes/solvente.png" alt="Solventes" class="mb-3" width="50px" height="70px" />
-            <h4 class="card-title text-color: var(--primary-alt)">Solventes</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Fin card -->
-      <!-- Tarjeta de Usuarios -->
-      <div class="col-sm-6 col-md-6 mb-4" @click="navigateToUsers">
-        <div class="card h-100 shadow-sm border-30">
-          <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white rounded">
-            <img src="/imagenes/usuario.png" alt="Usuarios" class="mb-3" width="50px" height="70px" />
-            <h4 class="card-title text-color: var(--primary-alt)">Usuarios</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Fin card -->
     </div>
-<br>
-    <div class="text-center ">
-      <h4 class="color: var(--primary)">SIGIRES INIFAP - CERI</h4>
-    </div>
+
+   
   </div>
 </template>
 
 <script>
 import WebFont from "webfontloader";
+import Chart from 'chart.js/auto';
+import { AlmacenService } from "@/users/services/AlmacenService";
+import { RecursoService } from "@/users/services/RecursoService";
 
 export default {
   name: "DashboardView",
-  mounted() {
+  data() {
+    return {
+      almacenes: [],
+      recursos: [],
+    };
+  },
+  async mounted() {
     WebFont.load({
       google: { families: ["Public Sans:300,400,500,600,700"] },
       custom: {
@@ -76,34 +64,109 @@ export default {
         sessionStorage.fonts = true;
       },
     });
+    await this.cargarDatos();
+    this.generarGraficaAlmacenes();
+    this.generarGraficaTiposRecursos();
   },
   methods: {
     navigateToUsers() {
       this.$router.push('/usuarios');
+    },
+    async cargarDatos() {
+      try {
+        this.almacenes = await AlmacenService.all();
+        this.recursos = await RecursoService.all();
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+      }
+    },
+    generarGraficaAlmacenes() {
+      const ctx = document.getElementById('almacenChart').getContext('2d');
+      const almacenesData = this.almacenes.map(almacen => {
+        return {
+          nombre: almacen.nombre_almacen,
+          cantidad: this.recursos.filter(recurso => recurso.catalogo_id === almacen.id).length
+        };
+      });
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: almacenesData.map(almacen => almacen.nombre),
+          datasets: [{
+            label: 'Cantidad de Recursos',
+            data: almacenesData.map(almacen => almacen.cantidad),
+            backgroundColor: 'rgba(54, 162, 235, 0.9)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    },
+    generarGraficaTiposRecursos() {
+      const ctx = document.getElementById('tipoRecursoChart').getContext('2d');
+      const tiposRecursoData = this.recursos.reduce((acc, recurso) => {
+        acc[recurso.tipo_recurso] = (acc[recurso.tipo_recurso] || 0) + 1;
+        return acc;
+      }, {});
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(tiposRecursoData),
+          datasets: [{
+            label: 'Distribución de Tipos de Recursos',
+            data: Object.values(tiposRecursoData),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.9)',
+              'rgba(54, 162, 235, 0.9)',
+              'rgba(255, 206, 86, 0.9)',
+              'rgba(75, 192, 192, 0.9)',
+              'rgba(153, 102, 255, 0.9)',
+              'rgba(255, 159, 64, 0.9)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1.5)',
+              'rgba(54, 162, 235, 1.5)',
+              'rgba(255, 206, 86, 1.5)',
+              'rgba(75, 192, 192, 1.5)',
+              'rgba(153, 102, 255, 1.5)',
+              'rgba(255, 159, 64, 1.5)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+        }
+      });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 body {
   border-radius: 50px;
   background-color: #f8f9fa;
 }
 
 .card {
- 
   box-shadow: 10px 5px 5px red;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   &:hover {
     transform: translateY(-5px);
-    transform: scale(0.9) ;
+    transform: scale(0.9);
     transition: 1s ease;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     cursor: pointer;
   }
-
 }
 
 h3 {
@@ -111,9 +174,6 @@ h3 {
 }
 
 .card-title {
-  
   color: #0c934a;
 }
-
-
 </style>

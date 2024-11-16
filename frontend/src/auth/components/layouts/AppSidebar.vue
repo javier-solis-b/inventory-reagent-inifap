@@ -35,6 +35,10 @@
         <span class="material-icons"> bar_chart</span>
         <span class="text">Reportes</span>
       </router-link>
+      <router-link class="button" to="/">
+        <span class="material-icons">fact_check</span>
+        <span class="text">Inventario</span>
+      </router-link>
       <!-- Mostrar la opción de Usuarios solo si el usuario es administrador -->
       <router-link v-if="isAdmin" class="button" to="/usuarios">
         <span class="material-icons">group</span>

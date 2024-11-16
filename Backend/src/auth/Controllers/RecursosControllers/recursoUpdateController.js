@@ -15,7 +15,9 @@ export const recursoUpdateController = async (request, response) => {
         formula: request.body.formula,
         capacidad_r: request.body.capacidad_r,
         lote: request.body.lote,
-        recipientes_actuales: request.body.recipientes_actuales
+        recipientes_actuales: request.body.recipientes_actuales,
+        unidad_medida: request.body.unidad_medida,
+        fecha_caducidad: request.body.fecha_caducidad
     };
 
     recurso.update(updateData)

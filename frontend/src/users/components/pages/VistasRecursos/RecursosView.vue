@@ -34,15 +34,16 @@
         <tr>
           <th>ID</th>
           <th>Almacén</th>
-          <th>No. de inventario</th>
+          <th>No. inventario</th>
           <th>Nombre</th>
           <th>Tipo</th>
           <th>Marca</th>
           <th>Fórmula</th>
           <th>PM</th>
-          <th>Capacidad recip.</th>
-          <th>Recipientes actuales</th>
+          <th>Capacidad</th>
+          <th>Recipientes</th>
           <th>Lote</th>
+          <th>Caducidad</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -56,10 +57,10 @@
           <td>{{ resource.marca || "-" }}</td>
           <td>{{ resource.formula || "-" }}</td>
           <td>{{ resource.pm || "-" }}</td>
-          <td>{{ resource.capacidad_r }}</td>
+          <td>{{ resource.capacidad_r }} {{ resource.unidad_medida }}</td>
           <td>{{ resource.recipientes_actuales || "-" }}</td>
           <td>{{ resource.lote || "-" }}</td>
-
+          <td>{{ resource.fecha_caducidad|| "-" }}</td>
           <td>
             <button
               @click="editarResource(resource)"
@@ -67,7 +68,9 @@
             >
               Editar
             </button>
+            
             <button
+            
               @click="eliminarRecurso(resource)"
               class="btn btn-sm btn-danger"
             >
@@ -94,21 +97,8 @@ export default {
   data() {
     return {
       recursos: [],
-      nuevoRecurso: {
-        tipo_recurso: "",
-        no_inventario: "",
-        nombre: "",
-        marca: "",
-        pm: "",
-        formula: "",
-        capacidad_r: null,
-        lote: "",
-        recipientes_actuales: null,
-        catalogo_id: null,
-      },
-      formularioAgregacionVisible: false,
       buscarPor: "",
-      filtroSeleccionado: "",
+      filtroSeleccionado: "todos",
       resultadosBusqueda: [],
     };
   },
@@ -126,37 +116,15 @@ export default {
   },
   methods: {
     agregarRecurso() {
-      if (
-        Object.values(this.nuevoRecurso).every(
-          (value) => value !== "" && value !== null
-        )
-      ) {
-        this.resultadosBusqueda.push({ ...this.nuevoRecurso });
-        this.cerrarFormularioAgregacion();
-        this.nuevoRecurso = {
-          tipo_recurso: "",
-          no_inventario: "",
-          nombre: "",
-          marca: "",
-          pm: "",
-          formula: "",
-          capacidad_r: null,
-          lote: "",
-          recipientes_actuales: null,
-          catalogo_id: null,
-        };
-      } else {
-        alert("Por favor, rellene todos los campos obligatorios.");
-      }
+      // Lógica para agregar un recurso nuevo
     },
     editarResource(resource) {
       this.$router.push({
         name: "recursos.edit",
         params: { id: resource.id },
-      })
+      });
       console.log("Editar recurso:", resource);
     },
-
     async eliminarRecurso(resource) {
       const result = await Swal.fire({
         title: "¿Estás seguro?",
@@ -188,7 +156,6 @@ export default {
         });
       }
     },
-
     buscarPorNombre() {
       if (this.buscarPor.trim()) {
         this.resultadosBusqueda = this.recursos.filter((resource) =>
@@ -197,12 +164,32 @@ export default {
       } else {
         this.resultadosBusqueda = this.recursos;
       }
+      this.filtrarRecursos();
+    },
+    filtrarRecursos() {
+      if (this.filtroSeleccionado === "todos") {
+        this.resultadosBusqueda = this.recursos.filter((resource) =>
+          resource.nombre.toLowerCase().includes(this.buscarPor.toLowerCase())
+        );
+      } else {
+        this.resultadosBusqueda = this.recursos.filter(
+          (resource) =>
+            resource.tipo_recurso.toLowerCase() === this.filtroSeleccionado &&
+            resource.nombre.toLowerCase().includes(this.buscarPor.toLowerCase())
+        );
+      }
     },
   },
   watch: {
     buscarPor: {
       handler() {
         this.buscarPorNombre();
+      },
+      immediate: true,
+    },
+    filtroSeleccionado: {
+      handler() {
+        this.filtrarRecursos();
       },
       immediate: true,
     },

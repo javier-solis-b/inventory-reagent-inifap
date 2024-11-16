@@ -5,17 +5,13 @@ import { env } from "../../Shared/env.js";
 
 export const loginController = async (request, response) => {
     const { name, password } = request.body;
-
     const user = await User.findOne({
         where: { name: name }
     });
-
     if (!user) {
         return response.status(401).json({ message: 'Usuario no existe' });
     }
-
     const userExist = await PasswordService.check(password, user.password);
-
     if (!userExist) {
         return response.status(401).json({ message: 'La contraseña es incorrecta' });
     }

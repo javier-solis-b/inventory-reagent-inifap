@@ -39,6 +39,12 @@ const Recurso = sequelize.define('recursos', {
     },
     catalogo_id: {
         type: DataTypes.INTEGER
+    },
+    unidad_medida: {
+        type: DataTypes.STRING
+    },
+    fecha_caducidad: {
+        type: DataTypes.STRING
     }
 }, {timestamps: false});
 
