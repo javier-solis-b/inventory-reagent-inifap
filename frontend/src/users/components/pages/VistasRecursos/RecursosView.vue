@@ -22,6 +22,7 @@
         <option value="solución">Soluciones</option>
       </select>
       <button
+       v-if="isAdmin"
         @click="$router.push({ name: 'recursos.create' })"
         class="btn btn-primary w-40 ms-2"
       >
@@ -44,7 +45,7 @@
           <th>Recipientes</th>
           <th>Lote</th>
           <th>Caducidad</th>
-          <th>Acciones</th>
+          <th  v-if="isAdmin">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +64,7 @@
           <td>{{ resource.fecha_caducidad|| "-" }}</td>
           <td>
             <button
+             v-if="isAdmin"
               @click="editarResource(resource)"
               class="btn btn-sm btn-warning mr-2"
             >
@@ -70,7 +72,7 @@
             </button>
             
             <button
-            
+                v-if="isAdmin"
               @click="eliminarRecurso(resource)"
               class="btn btn-sm btn-danger"
             >
@@ -92,6 +94,7 @@
 import { RecursoService } from "@/users/services/RecursoService";
 import backend from "@/backend";
 import Swal from "sweetalert2";
+import { computed } from 'vue';
 
 export default {
   data() {
@@ -100,6 +103,14 @@ export default {
       buscarPor: "",
       filtroSeleccionado: "todos",
       resultadosBusqueda: [],
+    };
+  },
+  setup() {
+    const isAdmin = computed(() => localStorage.getItem("isAdmin") === "true");
+
+    return {
+      isAdmin,
+      // ... otros métodos y propiedades
     };
   },
   async mounted() {
@@ -115,9 +126,7 @@ export default {
     }
   },
   methods: {
-    agregarRecurso() {
-      // Lógica para agregar un recurso nuevo
-    },
+   
     editarResource(resource) {
       this.$router.push({
         name: "recursos.edit",
@@ -126,6 +135,10 @@ export default {
       console.log("Editar recurso:", resource);
     },
     async eliminarRecurso(resource) {
+      if (!this.isAdmin.value) {
+      console.log("Solo los administradores pueden eliminar recursos.");
+      return;
+    }
       const result = await Swal.fire({
         title: "¿Estás seguro?",
         text: `¿Quieres eliminar al recurso ${resource.nombre}?`,

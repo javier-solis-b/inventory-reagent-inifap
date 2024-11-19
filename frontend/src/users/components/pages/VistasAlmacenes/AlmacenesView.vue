@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <h3 class="fw-bold mb-3 text-color">Almacenes</h3>
-    
+
     <!-- Filtro y selector para abrir el formulario flotante de agregación -->
     <div class="d-flex align-items-center mb-3">
       <input
@@ -11,6 +11,7 @@
         class="form-control me-2"
       />
       <button
+       v-if="isAdmin"
         @click="$router.push({ name: 'almacenes.create' })"
         class="btn btn-primary"
       >
@@ -39,12 +40,14 @@
               Ver contenido de este almacén
             </button>
             <button
+              v-if="isAdmin"
               @click="editarAlmacen(almacen)"
               class="btn btn-sm btn-warning me-2"
             >
               Editar
             </button>
             <button
+              v-if="isAdmin"
               @click="eliminarAlmacen(almacen.id)"
               class="btn btn-sm btn-danger"
             >
@@ -58,9 +61,7 @@
     <!-- Ventana modal para ver el contenido del almacén -->
     <v-dialog v-model="verModal" max-width="1200px">
       <v-card>
-        <v-card-title>
-          Contenido del Almacén
-        </v-card-title>
+        <v-card-title> Contenido del Almacén </v-card-title>
         <v-card-text>
           <div class="table-responsive">
             <table class="table table-striped table-bordered text-center">
@@ -106,7 +107,8 @@
 
     <!-- Resultados de búsqueda -->
     <p v-if="resultadosBusqueda.length > 0" class="mt-3">
-      Resultados de búsqueda: {{ resultadosBusqueda.length }} almacenes encontrados.
+      Resultados de búsqueda: {{ resultadosBusqueda.length }} almacenes
+      encontrados.
     </p>
   </div>
 </template>
@@ -114,6 +116,7 @@
 <script>
 import { AlmacenService } from "@/users/services/AlmacenService";
 import { RecursoService } from "@/users/services/RecursoService";
+import { computed } from "vue";
 
 export default {
   data() {
@@ -123,6 +126,14 @@ export default {
       resultadosBusqueda: [],
       verModal: false, // Para controlar la visibilidad de la ventana modal
       recursosAlmacen: [], // Almacenar los recursos del almacén seleccionado
+    };
+  },
+  setup() {
+    const isAdmin = computed(() => localStorage.getItem("isAdmin") === "true");
+
+    return {
+      isAdmin,
+      // ... otros métodos y propiedades
     };
   },
   async mounted() {
@@ -148,7 +159,7 @@ export default {
     editarAlmacen(almacen) {
       console.log("Editar almacén:", almacen);
       // Implementa la funcionalidad para editar el almacén
-      this.$router.push({ name: 'almacenes.edit', params: { id: almacen.id } });
+      this.$router.push({ name: "almacenes.edit", params: { id: almacen.id } });
     },
     async eliminarAlmacen(id) {
       try {
@@ -158,13 +169,17 @@ export default {
         this.cargarAlmacenes(); // Recargar la lista de almacenes después de la eliminación
       } catch (error) {
         console.error("Error al eliminar el almacén:", error);
-        alert("Ha ocurrido un error al eliminar el almacén. Por favor, inténtelo nuevamente.");
+        alert(
+          "Ha ocurrido un error al eliminar el almacén. Por favor, inténtelo nuevamente."
+        );
       }
     },
     buscarPorNombre() {
       if (this.buscarPor.trim()) {
         this.resultadosBusqueda = this.almacenes.filter((almacen) =>
-          almacen.nombre_almacen.toLowerCase().includes(this.buscarPor.toLowerCase())
+          almacen.nombre_almacen
+            .toLowerCase()
+            .includes(this.buscarPor.toLowerCase())
         );
       } else {
         this.resultadosBusqueda = this.almacenes;
@@ -173,7 +188,9 @@ export default {
     async verContenidoAlmacen(catalogoId) {
       try {
         const recursos = await RecursoService.all();
-        this.recursosAlmacen = recursos.filter(recurso => recurso.catalogo_id === catalogoId);
+        this.recursosAlmacen = recursos.filter(
+          (recurso) => recurso.catalogo_id === catalogoId
+        );
         this.verModal = true;
       } catch (error) {
         console.error("Error al cargar los recursos del almacén:", error);
@@ -184,7 +201,7 @@ export default {
     },
     cerrarModal() {
       this.verModal = false;
-    }
+    },
   },
   watch: {
     buscarPor: {
