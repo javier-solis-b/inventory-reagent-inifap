@@ -23,9 +23,18 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'login',
+      component: LoginView,
+    },
+    {
+      
+      path: '/',
       component: AuthLayout,
+      
       children: [
+        
         {
+          
           path: '/usuarios',
           name: 'usuarios',
           component: UsersView,
@@ -75,11 +84,7 @@ const router = createRouter({
         },
       ]
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
-    },
+    
     {
       path: '/403',
       name: '403',

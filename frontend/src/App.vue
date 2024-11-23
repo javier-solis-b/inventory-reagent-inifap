@@ -14,10 +14,11 @@ export default {
 
 import { createApp } from 'vue';
 import App from './App.vue';
-import Paginate from 'vuejs-paginate-next';
+//import Paginate from 'vuejs-paginate-next';
+import router from './router'
 
 const app = createApp(App);
-app.use(Paginate);
+app.use(router);
 app.mount('#app');
 
 </script>
