@@ -1,7 +1,8 @@
-import { TokenService } from "../services/TokenService";
+import { TokenService } from "../Services/TokenService";
 import backend from "@/backend.js";
 
-export const verifyTokenMiddleware = async (to, from, next) => {
+
+export const verifyTokenMiddleware = async (to, next) => {
     console.log('🟣Ejecutando autenticación');
     
     if (!to.meta.requireAuth) {

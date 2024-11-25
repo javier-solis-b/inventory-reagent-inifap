@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { AuthService } from "@/auth/services/AuthService.js";
+import { AuthService } from "@/auth/Services/AuthService.js";
 import { useRouter } from "vue-router";
 
 export default {
