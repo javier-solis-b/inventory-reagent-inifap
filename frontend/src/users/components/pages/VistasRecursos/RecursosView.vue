@@ -135,10 +135,7 @@ export default {
       console.log("Editar recurso:", resource);
     },
     async eliminarRecurso(resource) {
-      if (!this.isAdmin.value) {
-      console.log("Solo los administradores pueden eliminar recursos.");
-      return;
-    }
+     
       const result = await Swal.fire({
         title: "¿Estás seguro?",
         text: `¿Quieres eliminar al recurso ${resource.nombre}?`,

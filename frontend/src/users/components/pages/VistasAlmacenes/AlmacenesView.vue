@@ -48,7 +48,7 @@
             </button>
             <button
               v-if="isAdmin"
-              @click="eliminarAlmacen(almacen.id)"
+              @click="eliminarAlmacen(almacen)"
               class="btn btn-sm btn-danger"
             >
               Eliminar
@@ -115,8 +115,10 @@
 
 <script>
 import { AlmacenService } from "@/users/services/AlmacenService";
-import { RecursoService } from "@/users/services/RecursoService";
+
 import { computed } from "vue";
+import Swal from "sweetalert2";
+import backend from "@/backend";
 
 export default {
   data() {
@@ -161,17 +163,36 @@ export default {
       // Implementa la funcionalidad para editar el almacén
       this.$router.push({ name: "almacenes.edit", params: { id: almacen.id } });
     },
-    async eliminarAlmacen(id) {
+    async eliminarAlmacen(almacen) {
+  
+      const result = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: `¿Quieres eliminar al recurso ${almacen.nombre_almacen}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: '<span style="color:white;">Sí, eliminar</span>',
+        cancelButtonText: '<span style="color:white;">Cancelar</span>',
+      });
+      if (!result.isConfirmed) {
+        return;
+      }
       try {
-        // Lógica para eliminar el almacén
-        console.log("Eliminar almacén con id:", id);
-        await AlmacenService.delete(id);
-        this.cargarAlmacenes(); // Recargar la lista de almacenes después de la eliminación
-      } catch (error) {
-        console.error("Error al eliminar el almacén:", error);
-        alert(
-          "Ha ocurrido un error al eliminar el almacén. Por favor, inténtelo nuevamente."
+        await backend.delete(`almacenes/${almacen.id}`);
+        this.resultadosBusqueda = this.resultadosBusqueda.filter(
+          (r) => r.id !== almacen.id
         );
+        Swal.fire({
+          icon: "success",
+          title: "¡Recurso eliminado exitosamente!",
+          confirmButtonText: "OK",
+        });
+      } catch (error) {
+        console.error("Error al eliminar recurso:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al eliminar recurso",
+          text: "Ha ocurrido un error al intentar eliminar el recurso.",
+        });
       }
     },
     buscarPorNombre() {
@@ -187,7 +208,7 @@ export default {
     },
     async verContenidoAlmacen(catalogoId) {
       try {
-        const recursos = await RecursoService.all();
+        const recursos = await AlmacenService.all();
         this.recursosAlmacen = recursos.filter(
           (recurso) => recurso.catalogo_id === catalogoId
         );
