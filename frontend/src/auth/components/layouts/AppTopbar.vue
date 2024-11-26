@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { TokenService } from "@/auth/services/TokenService";
+import { TokenService } from "@/auth/Services/TokenService";
 import Swal from "sweetalert2";
 
 export default {

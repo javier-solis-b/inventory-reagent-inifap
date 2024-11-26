@@ -1,5 +1,6 @@
-import { TokenService } from "../services/TokenService";
+import { TokenService } from "../Services/TokenService";
 import backend from "@/backend.js";
+
 
 export const verifyTokenMiddleware = async (to, from, next) => {
     console.log('🟣Ejecutando autenticación');
