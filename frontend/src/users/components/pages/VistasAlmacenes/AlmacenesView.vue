@@ -115,7 +115,7 @@
 
 <script>
 import { AlmacenService } from "@/users/services/AlmacenService";
-
+import { RecursoService } from "@/users/services/RecursoService";
 import { computed } from "vue";
 import Swal from "sweetalert2";
 import backend from "@/backend";
@@ -208,7 +208,8 @@ export default {
     },
     async verContenidoAlmacen(catalogoId) {
       try {
-        const recursos = await AlmacenService.all();
+        const recursos = await RecursoService.all();
+        //const recursos = await AlmacenService.all();
         this.recursosAlmacen = recursos.filter(
           (recurso) => recurso.catalogo_id === catalogoId
         );

@@ -23,5 +23,32 @@ export class RecursoService {
         }
     }
 
-    // ... otros métodos estáticos ...
+    static async updateCapacidad(id, cantidad, accion) {
+        try {
+          const response = await backend.post(`/recursos/${id}/update-capacity`, { cantidad, accion });
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            throw new Error(`Error al actualizar capacidad: ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error('Error al actualizar capacidad:', error);
+          throw error;
+        }
+      }
+    
+      static async updateRecipientes(id, accion) {
+        try {
+          const response = await backend.post(`/recursos/${id}/update-recipientes`, { accion });
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            throw new Error(`Error al actualizar recipientes: ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error('Error al actualizar recipientes:', error);
+          throw error;
+        }
+      }
+    
 }

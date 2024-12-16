@@ -5,7 +5,7 @@ export const almacenDeleteController = async (request, response) => {
 
     await Almacen.destroy({
         where: {
-            id: Id
+            id: almacenId
         }
     })
     response.status(204).json({});

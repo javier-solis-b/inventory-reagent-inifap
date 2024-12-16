@@ -2,12 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { verifyTokenMiddleware } from './auth/middlewares/verifyTokenMiddleware.js';
 
 import UsersView from '@/users/components/pages/VistasUsuarios/UsersView.vue';
+import InventarioView from './users/components/pages/VistasInventarios/InventarioView.vue';
 
 import CreateUsersView from '@/users/components/pages/VistasUsuarios/CreateUsersView.vue';
 import RecursosCrear from '@/users/components/pages/VistasRecursos/RecursosCrear.vue';
+import CreateAlmacenesView from './users/components/pages/VistasAlmacenes/CreateAlmacenesView.vue';
 
 import EditUsersView from '@/users/components/pages/VistasUsuarios/EditUsersView.vue';
 import EditRecursosView from '@/users/components/pages/VistasRecursos/EditRecursosView.vue'
+import EditAlmacenesView from './users/components/pages/VistasAlmacenes/EditAlmacenesView.vue';
+
 
 import DashboardView from '@/users/components/pages/DashboardView.vue';
 import LoginView from '@/auth/components/pages/LoginView.vue';
@@ -76,6 +80,25 @@ const router = createRouter({
           component: AlmacenesView,
           meta: { requireAuth: true}
         },
+        {
+          path: '/almacenes/crear',
+          name: 'almacenes.create',
+          component: CreateAlmacenesView,
+          meta: { requireAuth: true}
+        },
+        {
+          path: '/almacenes/:id/editar',
+          name: 'almacenes.edit',
+          component: EditAlmacenesView,
+          meta: { requireAuth: true}
+        },
+        {
+          path: '/inventario',
+          name: 'inventario',
+          component: InventarioView,
+          meta: { requireAuth: true}
+        },
+      
         {
           path: '/dashboard',
           name: 'dashboard',

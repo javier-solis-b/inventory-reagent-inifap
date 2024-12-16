@@ -64,7 +64,7 @@
 
 <script>
 import backend from "@/backend";
-import Swal from "sweetalert2"; // Importa SweetAlert
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -72,7 +72,7 @@ export default {
       name: "",
       password: "",
       repeatedPassword: "",
-      isAdmin: null, // Permite que esto esté vacío
+      isAdmin: null,
     };
   },
   methods: {
@@ -85,7 +85,7 @@ export default {
           text: "Por favor, asegúrate de llenar todos los campos requeridos.",
           confirmButtonText: '<span style="color:white;">ok</span>',
         });
-        return; // Detener la ejecución aquí
+        return;
       }
 
       if (this.password !== this.repeatedPassword) {
@@ -95,38 +95,48 @@ export default {
           text: "Las contraseñas no coinciden",
           confirmButtonText: '<span style="color:white;">ok</span>',
         });
-        return; // Detener la ejecución aquí
+        return;
       }
 
       // Convertir el valor del checkbox a un entero
       const isAdminInt = this.isAdmin ? 1 : 0;
 
-      await backend
-        .post("usuarios", {
+      try {
+        await backend.post("usuarios", {
           name: this.name,
           password: this.password,
           isAdmin: isAdminInt,
-        })
-        .catch((error) => {
-          console.error("Error al crear el usuario:", error.response.data);
-          Swal.fire({
-            icon: "error",
-            title: "Error al crear el usuario",
-            text: "Hubo un problema al crear el usuario. Por favor, inténtalo de nuevo.",
-            confirmButtonText: '<span style="color:white;">ok</span>',
-          });
         });
 
-      this.$router.push({ name: "usuarios" });
-      console.log({
-        name: this.name,
-        password: this.password,
-        repeatedPassword: this.repeatedPassword,
-        isAdmin: isAdminInt,
-      });
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          icon: "success",
+          title: "Usuario creado con éxito",
+          text: "El nuevo usuario ha sido creado correctamente.",
+          confirmButtonText: '<span style="color:white;">ok</span>',
+        });
+
+        // Redirigir al usuario después de mostrar el mensaje de éxito
+        this.$router.push({ name: "usuarios" });
+        console.log({
+          name: this.name,
+          password: this.password,
+          repeatedPassword: this.repeatedPassword,
+          isAdmin: isAdminInt,
+        });
+      } catch (error) {
+        console.error("Error al crear el usuario:", error.response.data);
+        Swal.fire({
+          icon: "error",
+          title: "Error al crear el usuario",
+          text: "Hubo un problema al crear el usuario. Por favor, inténtalo de nuevo.",
+          confirmButtonText: '<span style="color:white;">ok</span>',
+        });
+      }
     },
   },
 };
+
 </script>
 
 <style lang="scss" scoped>

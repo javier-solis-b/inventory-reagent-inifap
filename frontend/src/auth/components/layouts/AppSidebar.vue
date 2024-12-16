@@ -35,7 +35,7 @@
         <span class="material-icons"> bar_chart</span>
         <span class="text">Reportes</span>
       </router-link>
-      <router-link class="button" to="/#">
+      <router-link class="button" to="/inventario">
         <span class="material-icons">fact_check</span>
         <span class="text">Inventario</span>
       </router-link>
