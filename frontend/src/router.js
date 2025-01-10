@@ -3,10 +3,14 @@ import { verifyTokenMiddleware } from './auth/middlewares/verifyTokenMiddleware.
 
 import UsersView from '@/users/components/pages/VistasUsuarios/UsersView.vue';
 import InventarioView from './users/components/pages/VistasInventarios/InventarioView.vue';
+import RecursosView from '@/users/components/pages/VistasRecursos/RecursosView.vue'
+import AlmacenesView from '@/users/components/pages/VistasAlmacenes/AlmacenesView.vue'
+import SolucionesStockView from '@/users/components/pages/VIstasSolucionesStock/SolucionesStockView.vue'
 
 import CreateUsersView from '@/users/components/pages/VistasUsuarios/CreateUsersView.vue';
 import RecursosCrear from '@/users/components/pages/VistasRecursos/RecursosCrear.vue';
 import CreateAlmacenesView from './users/components/pages/VistasAlmacenes/CreateAlmacenesView.vue';
+import CreateSolucionS from '@/users/components/pages/VIstasSolucionesStock/CreateSolucionS.vue';
 
 import EditUsersView from '@/users/components/pages/VistasUsuarios/EditUsersView.vue';
 import EditRecursosView from '@/users/components/pages/VistasRecursos/EditRecursosView.vue'
@@ -18,8 +22,7 @@ import LoginView from '@/auth/components/pages/LoginView.vue';
 import UnAuthorizedPage from '@/auth/components/pages/UnAuthorizedPage.vue';
 import NoPermisos from '@/auth/components/pages/NoPermisos.vue'
 import AuthLayout from '@/auth/components/layouts/AuthLayout.vue';
-import RecursosView from '@/users/components/pages/VistasRecursos/RecursosView.vue'
-import AlmacenesView from '@/users/components/pages/VistasAlmacenes/AlmacenesView.vue'
+
 
 
 const router = createRouter({
@@ -98,7 +101,18 @@ const router = createRouter({
           component: InventarioView,
           meta: { requireAuth: true}
         },
-      
+        {
+          path: '/solucioness',
+          name: 'solucioness',
+          component: SolucionesStockView,
+          meta: { requireAuth: true}
+        },
+        {
+          path: '/solucioness/crear',
+          name: 'solucioness.create',
+          component: CreateSolucionS,
+          meta: { requireAuth: true}
+        },
         {
           path: '/dashboard',
           name: 'dashboard',

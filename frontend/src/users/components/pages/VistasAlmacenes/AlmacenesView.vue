@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <h3 class="fw-bold mb-3 text-color">Almacenes</h3>
+    <h3 class="fw-bold mb-3 text-color"  style="color: #0c934a">Almacenes</h3>
 
     <!-- Filtro y selector para abrir el formulario flotante de agregación -->
     <div class="d-flex align-items-center mb-3">

@@ -10,7 +10,7 @@
     />
     <div class="menu-toggle-wrap">
       <button class="menu-toggle" @click="ToggleMenu">
-        <span class="material-icons">keyboard_double_arrow_right</span>
+       <span class="material-icons">keyboard_double_arrow_right</span>
       </button>
     </div>
     <h3>Menú</h3>
@@ -20,23 +20,23 @@
         <span class="text">Inicio</span>
       </router-link>
       <router-link class="button" to="/recursos">
-        <span class="material-icons">science</span>
+       <span class="material-icons">science</span>
         <span class="text">Recursos</span>
       </router-link>
       <router-link class="button" to="/almacenes">
         <span class="material-icons">warehouse</span>
         <span class="text">Almacenes</span>
       </router-link>
-      <router-link class="button" to="/#">
+      <router-link class="button" to="/solucioness">
         <span class="material-icons">inventory_2</span>
         <span class="text">Soluciones stock</span>
       </router-link>
       <router-link class="button" to="/#">
-        <span class="material-icons"> bar_chart</span>
+     <span class="material-icons"> bar_chart</span>
         <span class="text">Reportes</span>
       </router-link>
       <router-link class="button" to="/inventario">
-        <span class="material-icons">fact_check</span>
+       <span class="material-icons">fact_check</span>
         <span class="text">Inventario</span>
       </router-link>
       <!-- Mostrar la opción de Usuarios solo si el usuario es administrador -->
