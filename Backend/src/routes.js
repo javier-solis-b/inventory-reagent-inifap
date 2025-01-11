@@ -19,11 +19,12 @@ import { indexAlmacenController } from './Users/Controllers/indexAlmacenControll
 import { almacenDeleteController } from './auth/Controllers/AlmacenesController/almacenDeleteController.js';
 import { createAlmacenController } from './Users/Controllers/CreateAlmacenController.js';
 import { almacenUpdateController } from './auth/Controllers/AlmacenesController/almacenUpdateController.js';
+//PARA SOLUCION STOCK
+import { createSolucionStockController } from './Users/Controllers/createSolucionStockController.js';
 //GENERALES
 import { loginController } from './auth/Controllers/loginController.js';
 import { verifyTokenController } from './auth/Controllers/verifyTokenController.js';
 import { tokenMiddleware } from './auth/Middlewares/tokenMiddleware.js';
-
 const router = express.Router();
 router.post('/api/v1/login', loginController);
 //CREAR
@@ -32,6 +33,7 @@ router.post('/api/v1/recursos', createRecursoController);
 router.post('/api/v1/almacenes', createAlmacenController);
 router.post('/api/v1/recursos/:id/update-capacity', tokenMiddleware, updateCapacidad);
 router.post('/api/v1/recursos/:id/update-recipientes', tokenMiddleware, updateRecipientes);
+router.post('/api/v1/soluciones-stock', createSolucionStockController);
 //BORRAR
 router.delete('/api/v1/usuarios/:id', tokenMiddleware, deleteController);
 router.delete('/api/v1/recursos/:id', recursoDeleteController);
