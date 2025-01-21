@@ -41,7 +41,7 @@
           <th>Marca</th>
           <th>Fórmula</th>
           <th>PM</th>
-          <th>Capacidad</th>
+          <th>Cantidad disponible</th>
           <th>Recipientes</th>
           <th>Lote</th>
           <th>Caducidad</th>

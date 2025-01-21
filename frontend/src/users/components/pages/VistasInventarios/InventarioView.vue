@@ -38,7 +38,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(resource, index) in resultadosBusqueda" :key="index">
+        <tr v-for="(resource, index) in resultadosBusqueda" :key="index" :class="{ 'table-danger': resource.capacidad_r === 0 || resource.recipientes_actuales === 0 }">
           <td>{{ resource.id }}</td>
           <td>{{ resource.almacen || "-" }}</td>
           <td>{{ resource.no_inventario }}</td>
@@ -152,6 +152,22 @@ export default {
     }
   },
   methods: {
+    async verificarSuficienteInventario(id, cantidad, accion) {
+    const updatedRecurso = this.resultadosBusqueda.find(res => res.id === id);
+    if (!updatedRecurso) {
+      console.error(`Recurso con ID ${id} no encontrado`);
+      return false;
+    }
+
+    if (accion === 'quitar' && cantidad > 0) {
+      if (cantidad > updatedRecurso.capacidad_r) {
+        alert("No se puede quitar más de la cantidad disponible.");
+        return false;
+      }
+    }
+
+    return true;
+  },
     async actualizarInventario(id, campo, valor) {
       try {
         console.log(`Enviando solicitud para actualizar recurso con ID ${id}`);
@@ -205,6 +221,10 @@ export default {
           if (accion === "agregar") {
             updatedRecurso.capacidad_r += cantidad;
           } else if (accion === "quitar") {
+            if (updatedRecurso.capacidad_r - cantidad < 0) {
+              alert("No se puede quitar más de la cantidad disponible.");
+              return;
+            }
             updatedRecurso.capacidad_r -= cantidad;
           }
 
@@ -258,6 +278,9 @@ export default {
               updatedRecurso.recipientes_actuales > 0
             ) {
               updatedRecurso.recipientes_actuales--;
+            } else {
+              alert("No se puede quitar más recipientes.");
+              return;
             }
 
             // Actualizar el inventario en la base de datos
@@ -323,8 +346,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style scoped>
 /* Estilos para el formulario flotante */

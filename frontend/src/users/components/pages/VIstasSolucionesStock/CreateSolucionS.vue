@@ -103,7 +103,7 @@ export default {
         const recursos = await RecursoService.all();
         this.listaRecursos = recursos.map((recurso) => ({
           id: recurso.id,
-          nombre: `${recurso.id} - ${recurso.nombre}`,
+          nombre: `${recurso.id} - ${recurso.nombre} -  ${recurso.no_inventario}`,
         }));
       } catch (error) {
         console.error("Error al cargar los recursos:", error);
