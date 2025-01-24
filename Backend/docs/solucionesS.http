@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/v1/soluciones-stock HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre_solucion": "hola",
+    "recursos": [
+        { "recurso_id": 47, "cantidad_usada": 10 },
+        { "recurso_id": 48, "cantidad_usada": 20 }
+    ]
+}

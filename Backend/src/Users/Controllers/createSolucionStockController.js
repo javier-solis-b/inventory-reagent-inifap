@@ -1,28 +1,29 @@
 import { SolucionesStock } from '../Models/SolucionesStock.js';
 import { SolucionRecursos } from '../Models/SolucionRecursos.js';
+import { sequelize } from '../../database.js';
 
 export const createSolucionStockController = async (request, response) => {
-  const { nombre_solucion, recursos } = request.body;
+    const { nombre_solucion, recursos } = request.body;
 
-  try {
-    // Crear la solución stock
-    const solucion = await SolucionesStock.create({ nombre_solucion });
+    const t = await sequelize.transaction();
 
-    // Crear los recursos asociados a la solución
-    const promises = recursos.map(recurso => {
-      return SolucionRecursos.create({
-        solucion_id: solucion.id,
-        recurso_id: recurso.recurso_id,
-        cantidad_usada: recurso.cantidad_usada
-      });
-    });
+    try {
+        const solucion = await SolucionesStock.create({ nombre_solucion }, { transaction: t });
+        const solucion_id = solucion.id;
 
-    // Esperar a que todas las promesas se resuelvan
-    await Promise.all(promises);
+        for (const recurso of recursos) {
+            await SolucionRecursos.create({
+                solucion_id: solucion_id,
+                recurso_id: recurso.recurso_id,
+                cantidad_usada: recurso.cantidad_usada
+            }, { transaction: t });
+        }
 
-    response.status(201).json({ message: 'Solución creada con éxito' });
-  } catch (err) {
-    console.error('Error al crear la solución stock:', err);
-    response.status(500).json({ message: 'Error al crear la solución stock' });
-  }
+        await t.commit();
+        return response.status(201).json({ message: 'Solución stock creada exitosamente' });
+    } catch (error) {
+        console.error('Error al crear la solución:', error); // <-- Esta línea imprime el error
+        await t.rollback();
+        return response.status(500).json({ error: 'Error al crear la solución stock' });
+    }
 };

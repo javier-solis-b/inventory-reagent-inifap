@@ -124,27 +124,58 @@ export default {
     onChangeRecurso(value) {
       console.log("Valor seleccionado:", value);
     },
+   
     async crearSolucion() {
-      try {
-        const datos = {
-          nombre_solucion: this.nombre_solucion,
-          recursos: this.recursos,
-        };
+  try {
+    // Convertir 'recursos' a un array regular
+    const recursosParseados = this.recursos.map(recurso => ({
+      recurso_id: recurso.recurso_id,
+      cantidad_usada: Number(recurso.cantidad_usada)
+    }));
 
-        console.log("Datos a enviar:", datos);
+    const datos = {
+      nombre_solucion: this.nombre_solucion,
+      recursos: recursosParseados
+    };
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log("Datos a enviar:", JSON.stringify(datos));
 
-        alert("Solución creada con éxito");
+    const response = await fetch('http://localhost:3000/api/v1/soluciones-stock', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    });
 
-        this.limpiarFormulario();
-      } catch (error) {
-        console.error("Error al crear la solución:", error);
-        alert(
-          "Hubo un error al crear la solución. Por favor, inténtalo de nuevo."
-        );
-      }
-    },
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      console.error('Detalles del error:', errorDetails);
+      throw new Error("Error al crear la solución");
+    }
+
+    const result = await response.json();
+    console.log("Respuesta del servidor:", result);
+
+    Swal.fire({
+      icon: "success",
+      title: "Solución creada con éxito",
+      confirmButtonText: '<span style="color:white;">OK</span>'
+    });
+
+    this.limpiarFormulario();
+  } catch (error) {
+    console.error("Error al crear la solución:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Hubo un problema al crear la solución. Por favor, inténtalo de nuevo.",
+      confirmButtonText: '<span style="color:white;">OK</span>'
+    });
+  }
+}
+,
+
     limpiarFormulario() {
       this.nombre_solucion = "";
       this.recursos = [{ recurso_id: null, cantidad_usada: "" }];
