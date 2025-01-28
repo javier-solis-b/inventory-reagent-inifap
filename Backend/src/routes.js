@@ -21,10 +21,14 @@ import { createAlmacenController } from './Users/Controllers/CreateAlmacenContro
 import { almacenUpdateController } from './auth/Controllers/AlmacenesController/almacenUpdateController.js';
 //PARA SOLUCION STOCK
 import { createSolucionStockController } from './Users/Controllers/createSolucionStockController.js';
+import { indexSolucionesController } from './Users/Controllers/indexSolucionesController.js';
+import { indexSolucionRecursosController } from './Users/Controllers/indexSolucionRecursosController.js'
+import { showSolucionRecursoController } from './auth/Controllers/solucionesController/showSolucionRecursoController.js';
 //GENERALES
 import { loginController } from './auth/Controllers/loginController.js';
 import { verifyTokenController } from './auth/Controllers/verifyTokenController.js';
 import { tokenMiddleware } from './auth/Middlewares/tokenMiddleware.js';
+import { SolucionesStock } from './Users/Models/SolucionesStock.js';
 const router = express.Router();
 router.post('/api/v1/login', loginController);
 //CREAR
@@ -47,6 +51,9 @@ router.get('/api/v1/usuarios/:id', tokenMiddleware, showController);
 router.get('/api/v1/usuarios', tokenMiddleware, indexUserController);
 router.get('/api/v1/recursos/:id', tokenMiddleware, showControllerRecurso);
 router.get('/api/v1/recursos', indexRecursoController);
+router.get('/api/v1/soluciones', indexSolucionesController);
+router.get('/api/v1/soluciones-recursos', indexSolucionRecursosController);
+router.get('/api/v1/soluciones-recursos/:id', showSolucionRecursoController);
 //OTROS
 router.get('/api/v1/token/verify', verifyTokenController);
 router.get('/api/v1/almacenes', indexAlmacenController);
