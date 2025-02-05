@@ -144,9 +144,11 @@ export default {
         confirmButtonText: '<span style="color:white;">Sí, eliminar</span>',
         cancelButtonText: '<span style="color:white;">Cancelar</span>',
       });
+
       if (!result.isConfirmed) {
         return;
       }
+
       try {
         await backend.delete(`recursos/${resource.id}`);
         this.resultadosBusqueda = this.resultadosBusqueda.filter(
@@ -159,11 +161,21 @@ export default {
         });
       } catch (error) {
         console.error("Error al eliminar recurso:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error al eliminar recurso",
-          text: "Ha ocurrido un error al intentar eliminar el recurso.",
-        });
+
+        if (error.response && error.response.data) {
+          // Muestra el mensaje de error específico de la clave foránea
+          Swal.fire({
+            icon: "error",
+            title: "Error al eliminar recurso",
+            text: error.response.data.message || "Ha ocurrido un error al intentar eliminar el recurso.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error al eliminar recurso",
+            text: "Ha ocurrido un error al intentar eliminar el recurso.",
+          });
+        }
       }
     },
     buscarPorNombre() {
@@ -206,7 +218,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Estilos para el formulario flotante */

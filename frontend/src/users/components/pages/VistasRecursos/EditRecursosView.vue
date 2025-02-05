@@ -35,7 +35,7 @@
               variant="underlined"
               v-model="recurso.no_inventario"
               label="No. de inventario"
-              type="number"
+          
               prepend-icon="mdi-format-list-numbered"
               required
             ></v-text-field>
@@ -91,7 +91,7 @@
             <v-text-field
               variant="underlined"
               v-model="recurso.capacidad_r"
-              label="Capacidad recip."
+              label="Cantidad disponible"
               type="number"
               prepend-icon="mdi-barrel"
               required
@@ -253,7 +253,7 @@ export default {
         Swal.fire({
           icon: "error",
           title: "Error al guardar/recuperar el recurso",
-          text: "Hubo un problema al guardar o recuperar el recurso. Por favor, inténtelo de nuevo.",
+          text: "Se recomienda verificar si se ingresó fecha.",
           confirmButtonText: '<span style="color:white;">OK</span>',
         });
       }

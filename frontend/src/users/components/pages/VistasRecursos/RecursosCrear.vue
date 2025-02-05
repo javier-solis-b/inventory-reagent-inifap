@@ -36,7 +36,6 @@
               variant="underlined"
               v-model="no_inventario"
               label="No. de inventario"
-              type="number"
               prepend-icon="mdi-format-list-numbered"
               required
             ></v-text-field>
@@ -92,7 +91,7 @@
             <v-text-field
               variant="underlined"
               v-model="capacidad_r"
-              label="Capacidad recip."
+              label="Cantidad disponible."
               type="number"
               prepend-icon="mdi-barrel"
               required
@@ -232,7 +231,7 @@ export default {
           id: id,
           nombre: this.nombre,
           tipo_recurso: this.tipo_recurso,
-          no_inventario: parseInt(this.no_inventario),
+          no_inventario: this.no_inventario,
           marca: this.marca,
           pm: parseFloat(this.pm),
           formula: this.formula,

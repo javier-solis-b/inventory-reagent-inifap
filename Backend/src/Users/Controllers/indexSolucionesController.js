@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\Users\Controllers\indexSolucionesController.js
 import { SolucionesStock } from "../../Users/Models/SolucionesStock.js";
 
 export const indexSolucionesController = async (request, response) => {

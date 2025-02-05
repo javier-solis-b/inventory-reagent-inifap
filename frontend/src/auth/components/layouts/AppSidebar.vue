@@ -31,10 +31,10 @@
         <span class="material-icons">inventory_2</span>
         <span class="text">Soluciones stock</span>
       </router-link>
-      <router-link class="button" to="/#">
+     <!-- <router-link class="button" to="/#">
      <span class="material-icons"> bar_chart</span>
         <span class="text">Reportes</span>
-      </router-link>
+      </router-link>-->
       <router-link class="button" to="/inventario">
        <span class="material-icons">fact_check</span>
         <span class="text">Inventario</span>

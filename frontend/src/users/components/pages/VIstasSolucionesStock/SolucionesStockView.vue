@@ -12,7 +12,7 @@
       />
       <button
         v-if="isAdmin"
-        @click="$router.push({ name: 'crearSolucion' })"
+        @click="$router.push({ name: 'solucioness.create' })"
         class="btn btn-primary"
       >
         + Crear nueva solución stock
@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="solucion in soluciones" :key="solucion.id">
+        <tr v-for="solucion in solucionesFiltradas" :key="solucion.id">
           <td>{{ solucion.id }}</td>
           <td>{{ solucion.nombre_solucion }}</td>
           <td>
@@ -39,10 +39,10 @@
             </div>
           </td>
           <td>
-            <button class="btn btn-success">Usar esta solución</button>
-            
+            <button @click="usarSolucion(solucion.nombre_solucion)" class="btn btn-success">
+              Usar esta solución
+            </button>
             <button class="btn btn-danger me-2">Eliminar</button>
-      
           </td>
         </tr>
       </tbody>
@@ -54,33 +54,67 @@
 import { computed, ref, onMounted } from "vue";
 import { SolucionStockService } from "@/users/services/SolucionStockService.js";
 import { SolucionRecursosService } from "@/users/services/SolucionRecursosService.js";
+import { useToast } from "vue-toastification"; // Importa useToast
 
 export default {
   setup() {
     const isAdmin = computed(() => localStorage.getItem("isAdmin") === "true");
     const buscarPor = ref("");
     const soluciones = ref([]);
+    const toast = useToast(); // Inicializa useToast
 
+    // Función para cargar soluciones con recursos
     const fetchSolucionesConRecursos = async () => {
       try {
         const solucionesResponse = await SolucionStockService.all();
-        soluciones.value = await Promise.all(solucionesResponse.map(async solucion => {
-          const recursoResponse = await SolucionRecursosService.all();
-          solucion.recursos = recursoResponse.filter(r => r.solucion_id === solucion.id);
+        const recursosResponse = await SolucionRecursosService.all();
+
+        // Mapear soluciones con sus recursos
+        soluciones.value = solucionesResponse.map(solucion => {
+          solucion.recursos = recursosResponse.filter(recurso => recurso.solucion_id === solucion.id);
           return solucion;
-        }));
+        });
       } catch (error) {
         console.error("Error fetching soluciones with recursos:", error);
+        toast.error("Error al cargar las soluciones y recursos"); // Notificación de error
       }
     };
 
+    // Filtrar soluciones por nombre
+    const solucionesFiltradas = computed(() => {
+      if (!buscarPor.value) return soluciones.value;
+      return soluciones.value.filter(solucion =>
+        solucion.nombre_solucion.toLowerCase().includes(buscarPor.value.toLowerCase())
+      );
+    });
+
+    // Función para usar una solución
+    const usarSolucion = async (nombreSolucion) => {
+      try {
+        await SolucionStockService.actualizarInventario(nombreSolucion);
+        toast.success(`Solución "${nombreSolucion}" usada correctamente`); // Notificación de éxito
+      } catch (error) {
+        console.error("Error al usar la solución:", error);
+        toast.error("Error al usar la solución"); // Notificación de error
+      }
+    };
+
+    // Cargar datos al montar el componente
     onMounted(fetchSolucionesConRecursos);
 
     return {
       isAdmin,
       buscarPor,
-      soluciones
+      solucionesFiltradas,
+      usarSolucion,
     };
-  }
+  },
 };
 </script>
+
+<style scoped>
+/* Estilos personalizados (opcional) */
+.text-color {
+  color: #0c934a;
+}
+</style>

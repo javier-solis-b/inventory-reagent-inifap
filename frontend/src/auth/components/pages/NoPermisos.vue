@@ -1,19 +1,45 @@
 <template>
-    <div>
-      <h1>Error 403</h1>
-      <h2>No eres administrador </h2>
-      <h3>no tienes permiso para acceder a esta página</h3>
-      <v-btn color="primary" @click="redirectToLogin">Volver al inicio</v-btn>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    methods: {
-      redirectToLogin() {
-        this.$router.push('/dashboard'); 
-      },
+  <v-container class="fill-height" fluid>
+    <v-row align="center" justify="center">
+      <v-col cols="12" md="6" class="text-center">
+        <v-row align="center" justify="center">
+        <v-img
+          src="../../../../public/imagenes/undraw_access-denied_krem.svg"
+          alt="Error 403"
+          class="mb-4"
+          max-width="300"
+        ></v-img>
+        </v-row>
+        <h1 class="display-2 font-weight-bold mb-4">Error 403</h1>
+        <h2 class="headline">Acceso Denegado</h2>
+        <p class="subtitle-1 mt-3">
+          Lo sentimos, no tienes permisos para acceder a esta página.
+        </p>
+        <v-btn
+          color="primary"
+          large
+          @click="redirectToLogin"
+          class="mt-5"
+        >
+          Volver al Inicio
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+export default {
+  methods: {
+    redirectToLogin() {
+      this.$router.push('/dashboard');
     },
-  };
-  </script>
-  
+  },
+};
+</script>
+
+<style scoped>
+.fill-height {
+  height: 100vh;
+}
+</style>

@@ -32,7 +32,7 @@
           <th>Nombre</th>
           <th>Tipo</th>
           <th>Fórmula</th>
-          <th>Capacidad</th>
+          <th>Cantidad disponible</th>
           <th>Recipientes</th>
           <th>Caducidad</th>
         </tr>

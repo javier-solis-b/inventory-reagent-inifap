@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\frontend\src\users\services\SolucionRecursosService.js
 import backend from '@/backend';
 import { RecursoService } from './RecursoService.js';
 
