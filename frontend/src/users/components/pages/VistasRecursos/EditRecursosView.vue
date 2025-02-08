@@ -119,7 +119,7 @@
           <v-col cols="12" sm="6" md="4">
             <v-select
               v-model="recurso.unidad_medida"
-               :items="['kg', 'g', 'mg', 'L', 'ml']"
+               :items="['microlitros', 'mililitros', 'litros', 'microgramos', 'miligramos', 'gramos', 'kilogramos']"
               label="Unidad de medida"
               variant="underlined"
               prepend-icon="mdi-ruler-square"
