@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\frontend\src\users\services\SolucionStockService.js
 import backend from '@/backend';
 
 export class SolucionStockService {

@@ -171,7 +171,7 @@ export default {
       catalogo_id: null,
       fecha_caducidad: null,
       unidad_medida: '',
-      unidadesMedida: ['microlitros', 'mililitros', 'litros', 'microgramos', 'miligramos', 'gramos', 'kilogramos'],
+      unidadesMedida: ['mililitro', 'microlitro', 'mililitro', 'kilogramo', 'gramo' ,'miligramo', 'microgramo'],
     };
   },
   async mounted() {

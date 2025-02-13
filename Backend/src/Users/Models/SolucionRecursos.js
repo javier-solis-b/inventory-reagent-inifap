@@ -4,7 +4,7 @@ import { sequelize } from "../../database.js";
 import { Recurso } from "./Recursos.js";
 import { SolucionesStock } from "./SolucionesStock.js";
 
-const SolucionRecursos = sequelize.define('solucion_recursos', {
+const SolucionRecursos = sequelize.define('SolucionesRecursos', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
