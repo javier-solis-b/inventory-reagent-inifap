@@ -29,7 +29,7 @@ const Recurso = sequelize.define('recursos', {
         type: DataTypes.STRING
     },
     capacidad_r: {
-        type: DataTypes.FLOAT
+        type: DataTypes.DECIMAL
     },
     lote: {
         type: DataTypes.STRING
