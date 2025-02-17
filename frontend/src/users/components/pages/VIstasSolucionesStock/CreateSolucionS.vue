@@ -1,7 +1,6 @@
 <template>
   <form @submit.prevent="crearSolucion">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    
     <div class="d-flex align-center mb-3">
       <v-btn icon @click="$router.push('/solucioness')" class="mr-2">
         <span class="material-symbols-outlined">arrow_back</span>
@@ -10,7 +9,6 @@
         <h3 class="fw-bold mb-0">Crear nueva solución stock</h3>
       </v-col>
     </div>
-
     <v-card>
       <v-container>
         <v-row>
@@ -24,7 +22,6 @@
               required
             ></v-text-field>
           </v-col>
-
           <!-- Medio de cultivo -->
           <v-col cols="12" sm="6" md="6">
             <v-text-field
@@ -35,7 +32,6 @@
             ></v-text-field>
           </v-col>
         </v-row>
-
         <!-- Recursos -->
         <div v-for="(recurso, index) in recursos" :key="index">
           <label :for="'recurso-' + index" class="form-label mb-2">{{ "Recurso " + (index + 1) }}</label>
@@ -55,7 +51,6 @@
                 clearable
               ></v-select>
             </v-col>
-            
             <v-col cols="8" sm="2" md="5">
               <v-text-field
                 v-model="recurso.cantidad_usada"
@@ -66,7 +61,6 @@
                 required
               ></v-text-field>
             </v-col>
-            
             <v-col cols="8" sm="2" md="5">
               <v-select
                 v-model="recurso.unidad_medida"
@@ -76,7 +70,6 @@
                 required
               ></v-select>
             </v-col>
-            
             <v-col cols="8" sm="2" md="4">
               <div>
                 <v-btn @click="eliminarRecurso(index)" color="error">
@@ -86,14 +79,12 @@
             </v-col>
           </div>
         </div>
-
         <!-- Botón Agregar Recurso -->
         <v-row justify="start" align="center" class="mt-3">
           <v-col cols="auto">
             <v-btn type="button" color="success" @click="agregarRecurso">Agregar Recurso</v-btn>
           </v-col>
         </v-row>
-
         <!-- Botón Crear Solución Stock -->
         <v-row justify="start" align="center" class="mt-3">
           <v-col cols="auto">
@@ -130,7 +121,7 @@ export default {
         this.listaRecursos = recursos.map((recurso) => ({
           id: recurso.id,
           nombre: `${recurso.nombre} - ${recurso.no_inventario} - ${recurso.unidad_medida}`,
-          unidad_medida: recurso.unidad_medida, // Asegúrate de incluir la unidad de medida
+          unidad_medida: recurso.unidad_medida,
         }));
       } catch (error) {
         console.error("Error al cargar los recursos:", error);
@@ -138,7 +129,7 @@ export default {
           icon: "error",
           title: "Error al cargar recursos",
           text: "Hubo un problema al cargar los recursos. Por favor, inténtalo de nuevo.",
-          confirmButtonText: '<span style="color:white;">OK</span>',
+          confirmButtonText: '<span style="color:white;">OK</span>'
         });
       }
     },
@@ -152,9 +143,10 @@ export default {
     },
 
     onChangeRecurso(index) {
-      const recursoSeleccionado = this.listaRecursos.find(recurso => recurso.id === this.recursos[index].recurso_id);
+      const recursoSeleccionado = this.listaRecursos.find(
+        recurso => recurso.id === this.recursos[index].recurso_id
+      );
       if (recursoSeleccionado) {
-        // Actualizar la unidad de medida del recurso en el formulario
         this.recursos[index].unidad_medida = recursoSeleccionado.unidad_medida;
       }
     },
@@ -162,22 +154,127 @@ export default {
     obtenerUnidadesMedida(unidadMedidaRecurso) {
       const unidadesVolumen = ['litros', 'mililitros', 'microlitros'];
       const unidadesMasa = ['kilogramos', 'gramos', 'miligramos', 'microgramos'];
-
+      
       if (unidadesVolumen.includes(unidadMedidaRecurso)) {
         return unidadesVolumen;
       } else if (unidadesMasa.includes(unidadMedidaRecurso)) {
         return unidadesMasa;
       } else {
-        return []; // Si no es ni volumen ni masa, no mostrar opciones
+        return [];
       }
+    },
+
+    esUnidadDeVolumen(unidad) {
+      return ['litros', 'mililitros', 'microlitros'].includes(unidad.toLowerCase());
+    },
+
+    esUnidadDeMasa(unidad) {
+      return ['kilogramos', 'gramos', 'miligramos', 'microgramos'].includes(unidad.toLowerCase());
+    },
+
+    convertirUnidad(cantidad, unidadOrigen, unidadDestino) {
+      cantidad = parseFloat(cantidad);
+      
+      // Conversiones de volumen
+      if (this.esUnidadDeVolumen(unidadOrigen)) {
+        switch (unidadOrigen.toLowerCase()) {
+          case 'litros':
+            switch (unidadDestino.toLowerCase()) {
+              case 'litros': return cantidad;
+              case 'mililitros': return cantidad * 1000;
+              case 'microlitros': return cantidad * 1000000;
+              default: return cantidad;
+            }
+          case 'mililitros':
+            switch (unidadDestino.toLowerCase()) {
+              case 'litros': return cantidad * 0.001;
+              case 'mililitros': return cantidad;
+              case 'microlitros': return cantidad * 1000;
+              default: return cantidad;
+            }
+          case 'microlitros':
+            switch (unidadDestino.toLowerCase()) {
+              case 'litros': return cantidad * 0.000001;
+              case 'mililitros': return cantidad * 0.001;
+              case 'microlitros': return cantidad;
+              default: return cantidad;
+            }
+        }
+      }
+      // Conversiones de masa
+      else if (this.esUnidadDeMasa(unidadOrigen)) {
+        switch (unidadOrigen.toLowerCase()) {
+          case 'gramos':
+            switch (unidadDestino.toLowerCase()) {
+              case 'gramos': return cantidad;
+              case 'miligramos': return cantidad * 1000;
+              case 'microgramos': return cantidad * 1000000;
+              case 'kilogramos': return cantidad * 0.001;
+              default: return cantidad;
+            }
+          case 'miligramos':
+            switch (unidadDestino.toLowerCase()) {
+              case 'kilogramos': return cantidad * 0.000001;
+              case 'gramos': return cantidad * 0.001;
+              case 'miligramos': return cantidad;
+              case 'microgramos': return cantidad * 1000;
+              default: return cantidad;
+            }
+          case 'microgramos':
+            switch (unidadDestino.toLowerCase()) {
+              case 'kilogramos': return cantidad * 0.000000001;
+              case 'gramos': return cantidad * 0.000001;
+              case 'miligramos': return cantidad * 0.001;
+              case 'microgramos': return cantidad;
+              default: return cantidad;
+            }
+          case 'kilogramos':
+            switch (unidadDestino.toLowerCase()) {
+              case 'kilogramos': return cantidad;
+              case 'gramos': return cantidad * 1000;
+              case 'miligramos': return cantidad * 1000000;
+              case 'microgramos': return cantidad * 1000000000;
+              default: return cantidad;
+            }
+        }
+      }
+      
+      console.error(`Unidades no compatibles para conversión: ${unidadOrigen} -> ${unidadDestino}`);
+      return cantidad;
     },
 
     async crearSolucion() {
       try {
-        const recursosParseados = this.recursos.map(recurso => ({
-          recurso_id: recurso.recurso_id,
-          cantidad_usada: this.convertirUnidad(recurso.cantidad_usada, recurso.unidad_medida)
-        }));
+        const recursosParseados = this.recursos.map(recurso => {
+          const cantidadOriginal = parseFloat(recurso.cantidad_usada);
+          let cantidadConvertida;
+          
+          // Determinar el tipo de unidad del recurso
+          const recursoSeleccionado = this.listaRecursos.find(r => r.id === recurso.recurso_id);
+          const unidadBase = recursoSeleccionado?.unidad_medida || recurso.unidad_medida;
+
+          console.log(`Conversión para recurso ${recursoSeleccionado?.nombre}:`);
+          console.log(`Cantidad original: ${cantidadOriginal} ${recurso.unidad_medida}`);
+          console.log(`Unidad base del recurso: ${unidadBase}`);
+
+          // Convertir según el tipo de unidad
+          if (this.esUnidadDeVolumen(unidadBase)) {
+            cantidadConvertida = this.convertirUnidad(cantidadOriginal, recurso.unidad_medida, unidadBase);
+          } else if (this.esUnidadDeMasa(unidadBase)) {
+            cantidadConvertida = this.convertirUnidad(cantidadOriginal, recurso.unidad_medida, unidadBase);
+          } else {
+            console.error(`Tipo de unidad no reconocido: ${unidadBase}`);
+            cantidadConvertida = cantidadOriginal;
+          }
+
+          console.log(`Cantidad convertida: ${cantidadConvertida} ${unidadBase}`);
+
+          return {
+            recurso_id: recurso.recurso_id,
+            cantidad_usada: cantidadConvertida,
+            unidad_medida: unidadBase
+          };
+        });
 
         const datos = {
           nombre_solucion: this.nombre_solucion,
@@ -218,50 +315,14 @@ export default {
       }
     },
 
-    convertirUnidad(cantidad, unidadMedida) {
-      const unidadesVolumen = ['litros', 'mililitros', 'microlitros'];
-      const unidadesMasa = ['kilogramos', 'gramos', 'miligramos', 'microgramos'];
-
-      if (unidadesVolumen.includes(unidadMedida)) {
-        // Conversiones de volumen
-        switch (unidadMedida) {
-          case 'litros':
-            return cantidad;
-          case 'mililitros':
-            return cantidad * 0.001;
-          case 'microlitros':
-            return cantidad * 0.000001;
-          default:
-            return cantidad;
-        }
-      } else if (unidadesMasa.includes(unidadMedida)) {
-        // Conversiones de masa
-        switch (unidadMedida) {
-          case 'kilogramos':
-            return cantidad * 1000;
-          case 'gramos':
-            return cantidad;
-          case 'miligramos':
-            return cantidad * 0.001;
-          case 'microgramos':
-            return cantidad * 0.000001;
-          default:
-            return cantidad;
-        }
-      } else {
-        return cantidad; // Mantener la cantidad para unidades no especificadas
-      }
-    },
-
     limpiarFormulario() {
       this.nombre_solucion = "";
       this.medios_cultivo = "";
       this.recursos = [{ recurso_id: null, cantidad_usada: "", unidad_medida: "" }];
-    },
-  },
+    }
+  }
 };
 </script>
-
 
 <style scoped>
 .card {
