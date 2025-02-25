@@ -16,6 +16,6 @@ const SolucionesStock = sequelize.define('SolucionesStock', {
         type: DataTypes.STRING,
         allowNull: false
     }
-}, {timestamps: false});
+}, { timestamps: false });
 
 export { SolucionesStock };

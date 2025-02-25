@@ -1,8 +1,6 @@
 // C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\Users\Models\SolucionRecursos.js
 import { Sequelize, DataTypes } from "sequelize";
 import { sequelize } from "../../database.js";
-import { Recurso } from "./Recursos.js";
-import { SolucionesStock } from "./SolucionesStock.js";
 
 const SolucionRecursos = sequelize.define('SolucionesRecursos', {
     id: {
@@ -12,22 +10,16 @@ const SolucionRecursos = sequelize.define('SolucionesRecursos', {
     },
     solucion_id: {
         type: DataTypes.INTEGER,
-        references: {
-            model: SolucionesStock,
-            key: 'id',
-        }
+        allowNull: false
     },
     recurso_id: {
         type: DataTypes.INTEGER,
-        references: {
-            model: Recurso,
-            key: 'id',
-        }
+        allowNull: false
     },
     cantidad_usada: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
     }
-}, {timestamps: false});
+}, { timestamps: false });
 
 export { SolucionRecursos };

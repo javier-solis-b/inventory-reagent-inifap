@@ -1,6 +1,7 @@
 import express from 'express';
 import {router} from './routes.js';
 import cors from 'cors';
+import "./Users/Models/relations.js"; // Importar relaciones
 
 const app = express();
 
