@@ -1,5 +1,5 @@
 //C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\auth\Controllers\solucionesController\showControllerSolucion.js
-import { SolucionesStock } from "../../../Users/Models/SolucionesStock";
+import { SolucionesStock } from "../../../Users/Models/SolucionesStock.js";
 
 export const showControllerSolucion = async (request, response) => {
     const solucionId = request.params.id;

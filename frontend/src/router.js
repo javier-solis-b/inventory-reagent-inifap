@@ -15,7 +15,7 @@ import CreateSolucionS from '@/users/components/pages/VIstasSolucionesStock/Crea
 import EditUsersView from '@/users/components/pages/VistasUsuarios/EditUsersView.vue';
 import EditRecursosView from '@/users/components/pages/VistasRecursos/EditRecursosView.vue'
 import EditAlmacenesView from './users/components/pages/VistasAlmacenes/EditAlmacenesView.vue';
-
+import EditSolucionesViewVue from './users/components/pages/VIstasSolucionesStock/EditSolucionesView.vue';
 
 import DashboardView from '@/users/components/pages/DashboardView.vue';
 import LoginView from '@/auth/components/pages/LoginView.vue';
@@ -112,6 +112,12 @@ const router = createRouter({
           name: 'solucioness.create',
           component: CreateSolucionS,
           meta: { requireAuth: true}
+        },
+        {
+          path: '/soluciones/:id/editar',
+          name: 'soluciones.edit',
+          component: EditSolucionesViewVue,
+          meta: { requireAuth: true, requireAdmin: true }
         },
         {
           path: '/dashboard',

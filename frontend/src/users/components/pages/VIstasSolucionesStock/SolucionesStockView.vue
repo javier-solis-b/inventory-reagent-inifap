@@ -1,6 +1,8 @@
 <template>
   <div class="container-fluid">
-    <h3 class="fw-bold mb-3 text-color" style="color: #0c934a">Soluciones Stock y Recursos</h3>
+    <h3 class="fw-bold mb-3 text-color" style="color: #0c934a">
+      Soluciones Stock y Recursos
+    </h3>
     <!-- Filtro y botón para añadir soluciones -->
     <div class="d-flex align-items-center mb-3">
       <input
@@ -9,13 +11,14 @@
         placeholder="Buscar por nombre de la solución..."
         class="form-control me-2"
       />
-      <select
-        v-model="filtroMedioCultivo"
-        class="form-control me-2"
-      >
+      <select v-model="filtroMedioCultivo" class="form-control me-2">
         <option value="">Todos los medios de cultivo</option>
-        <option v-for="medio in mediosCultivoUnicos" :key="medio" :value="medio">
-          {{ medio || 'Sin medio de cultivo' }}
+        <option
+          v-for="medio in mediosCultivoUnicos"
+          :key="medio"
+          :value="medio"
+        >
+          {{ medio || "Sin medio de cultivo" }}
         </option>
       </select>
       <button
@@ -43,15 +46,36 @@
           <td>{{ solucion.medios_cultivo }}</td>
           <td>{{ solucion.nombre_solucion }}</td>
           <td>
-            <div v-for="recurso in solucion.recursos" :key="recurso.id" style="color: #5a5a5a;">
-              {{ recurso.nombre }}: {{ convertirUnidad(recurso.cantidad_usada, recurso.unidad_medida) }} 
+            <div
+              v-for="recurso in solucion.recursos"
+              :key="recurso.id"
+              style="color: #5a5a5a"
+            >
+              {{ recurso.nombre }}:
+              {{
+                convertirUnidad(recurso.cantidad_usada, recurso.unidad_medida)
+              }}
             </div>
           </td>
           <td>
-            <button @click="usarSolucion(solucion.nombre_solucion)" class="btn btn-success me-2">
+            <button
+              @click="usarSolucion(solucion.nombre_solucion)"
+              class="btn btn-success me-2"
+            >
               Usar esta solución
             </button>
-            <button class="btn btn-warning me-2" style="background-color: yellow;">Editar</button>
+            <button
+              @click="
+                $router.push({
+                  name: 'soluciones.edit',
+                  params: { id: solucion.id },
+                })
+              "
+              class="btn btn-warning me-2"
+              style="background-color: yellow"
+            >
+              Editar
+            </button>
             <button class="btn btn-danger me-2">Eliminar</button>
           </td>
         </tr>
@@ -77,7 +101,7 @@ export default {
     // Obtener medios de cultivo únicos
     const mediosCultivoUnicos = computed(() => {
       const medios = new Set();
-      soluciones.value.forEach(sol => {
+      soluciones.value.forEach((sol) => {
         if (sol.medios_cultivo) {
           medios.add(sol.medios_cultivo);
         }
@@ -91,9 +115,9 @@ export default {
         const solucionesResponse = await SolucionStockService.all();
         const recursosResponse = await SolucionRecursosService.all();
         // Mapear soluciones con sus recursos
-        soluciones.value = solucionesResponse.map(solucion => {
-          solucion.recursos = recursosResponse.filter(recurso => 
-            recurso.solucion_id === solucion.id
+        soluciones.value = solucionesResponse.map((solucion) => {
+          solucion.recursos = recursosResponse.filter(
+            (recurso) => recurso.solucion_id === solucion.id
           );
           return solucion;
         });
@@ -105,10 +129,14 @@ export default {
 
     // Filtrar soluciones por nombre y medio de cultivo
     const solucionesFiltradas = computed(() => {
-      return soluciones.value.filter(solucion => {
-        const nombreMatch = !buscarPor.value || 
-          solucion.nombre_solucion.toLowerCase().includes(buscarPor.value.toLowerCase());
-        const medioMatch = !filtroMedioCultivo.value || 
+      return soluciones.value.filter((solucion) => {
+        const nombreMatch =
+          !buscarPor.value ||
+          solucion.nombre_solucion
+            .toLowerCase()
+            .includes(buscarPor.value.toLowerCase());
+        const medioMatch =
+          !filtroMedioCultivo.value ||
           solucion.medios_cultivo === filtroMedioCultivo.value;
         return nombreMatch && medioMatch;
       });
@@ -130,17 +158,22 @@ export default {
 
     // Función para convertir unidades
     const convertirUnidad = (cantidad, unidadMedida) => {
-      const unidadesVolumen = ['litros', 'mililitros', 'microlitros'];
-      const unidadesMasa = ['kilogramos', 'gramos', 'miligramos', 'microgramos'];
+      const unidadesVolumen = ["litros", "mililitros", "microlitros"];
+      const unidadesMasa = [
+        "kilogramos",
+        "gramos",
+        "miligramos",
+        "microgramos",
+      ];
 
       if (unidadesVolumen.includes(unidadMedida)) {
         // Conversiones de volumen
         switch (unidadMedida) {
-          case 'litros':
+          case "litros":
             return `${cantidad} L`;
-          case 'mililitros':
+          case "mililitros":
             return `${cantidad} mL`;
-          case 'microlitros':
+          case "microlitros":
             return `${cantidad} µL`;
           default:
             return `${cantidad}`;
@@ -148,13 +181,13 @@ export default {
       } else if (unidadesMasa.includes(unidadMedida)) {
         // Conversiones de masa
         switch (unidadMedida) {
-          case 'kilogramos':
+          case "kilogramos":
             return `${cantidad} kg`;
-          case 'gramos':
+          case "gramos":
             return `${cantidad} g`;
-          case 'miligramos':
+          case "miligramos":
             return `${cantidad} mg`;
-          case 'microgramos':
+          case "microgramos":
             return `${cantidad} µg`;
           default:
             return `${cantidad}`;

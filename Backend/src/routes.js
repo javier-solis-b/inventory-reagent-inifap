@@ -29,8 +29,13 @@ import { loginController } from './auth/Controllers/loginController.js';
 import { verifyTokenController } from './auth/Controllers/verifyTokenController.js';
 import { tokenMiddleware } from './auth/Middlewares/tokenMiddleware.js';
 import { SolucionesStock } from './Users/Models/SolucionesStock.js';
+import { showControllerSolucion } from './auth/Controllers/solucionesController/showControllerSolucion.js';
+
+
 const router = express.Router();
 router.post('/api/v1/login', loginController);
+// Definir la ruta para obtener una solución por su ID
+router.get('/api/v1/soluciones/:id', showControllerSolucion);
 //CREAR
 router.post('/api/v1/usuarios', createUserController);
 router.post('/api/v1/recursos', createRecursoController);
