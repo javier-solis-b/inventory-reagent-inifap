@@ -1,4 +1,5 @@
 import express from 'express';
+
 //PARA USUARIOS
 import { indexUserController } from './Users/Controllers/indexUserController.js';
 import { createUserController } from './Users/Controllers/createUserController.js';
@@ -62,5 +63,5 @@ router.get('/api/v1/soluciones-recursos/:id', showSolucionRecursoController);
 //OTROS
 router.get('/api/v1/token/verify', verifyTokenController);
 router.get('/api/v1/almacenes', indexAlmacenController);
-
+router.get('/api/v1/soluciones/:id/recursos', showSolucionRecursoController);
 export { router };

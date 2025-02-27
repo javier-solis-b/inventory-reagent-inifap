@@ -1,3 +1,4 @@
+// C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\frontend\src\users\services\SolucionStockService.js
 import backend from '@/backend';
 
 export class SolucionStockService {
@@ -7,9 +8,9 @@ export class SolucionStockService {
     return response.data ?? [];
   }
 
-  // Obtener una solución específica por su ID
-  static async get(id) {
-    const response = await backend.get(`/soluciones/${id}`);
+  // Obtener una solución específica por su ID con sus recursos
+  static async getWithResources(id) {
+    const response = await backend.get(`/soluciones/${id}/recursos`);
     return response.data;
   }
 
