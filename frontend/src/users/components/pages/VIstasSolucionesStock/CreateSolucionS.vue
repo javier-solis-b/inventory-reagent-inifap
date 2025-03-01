@@ -59,7 +59,12 @@
                 step="0.01"
                 prepend-icon="mdi-measurement-variant"
                 required
+                @input="convertirEnTiempoReal(index)"
               ></v-text-field>
+              <!-- Etiqueta para mostrar la conversión -->
+              <div v-if="recurso.conversion">
+                <small class="text-muted">{{ recurso.conversion }}</small>
+              </div>
             </v-col>
             <v-col cols="8" sm="2" md="5">
               <v-select
@@ -68,6 +73,7 @@
                 label="Unidad de Medida"
                 prepend-icon="mdi-scale"
                 required
+                @update:modelValue="convertirEnTiempoReal(index)"
               ></v-select>
             </v-col>
             <v-col cols="8" sm="2" md="4">
@@ -105,7 +111,7 @@ export default {
     return {
       nombre_solucion: "",
       medios_cultivo: "",
-      recursos: [{ recurso_id: null, cantidad_usada: "", unidad_medida: "" }],
+      recursos: [{ recurso_id: null, cantidad_usada: "", unidad_medida: "", conversion: "" }],
       listaRecursos: [],
     };
   },
@@ -135,7 +141,7 @@ export default {
     },
 
     agregarRecurso() {
-      this.recursos.push({ recurso_id: null, cantidad_usada: "", unidad_medida: "" });
+      this.recursos.push({ recurso_id: null, cantidad_usada: "", unidad_medida: "", conversion: "" });
     },
 
     eliminarRecurso(index) {
@@ -148,6 +154,7 @@ export default {
       );
       if (recursoSeleccionado) {
         this.recursos[index].unidad_medida = recursoSeleccionado.unidad_medida;
+        this.convertirEnTiempoReal(index);
       }
     },
 
@@ -243,6 +250,23 @@ export default {
       return cantidad;
     },
 
+    convertirEnTiempoReal(index) {
+      const recurso = this.recursos[index];
+      if (recurso.recurso_id && recurso.cantidad_usada && recurso.unidad_medida) {
+        const recursoSeleccionado = this.listaRecursos.find(r => r.id === recurso.recurso_id);
+        const unidadBase = recursoSeleccionado?.unidad_medida || recurso.unidad_medida;
+
+        if (this.esUnidadDeVolumen(unidadBase) || this.esUnidadDeMasa(unidadBase)) {
+          const cantidadConvertida = this.convertirUnidad(recurso.cantidad_usada, recurso.unidad_medida, unidadBase);
+          this.recursos[index].conversion = `Conversión de ${recurso.unidad_medida} a ${unidadBase}: ${cantidadConvertida} ${unidadBase}`;
+        } else {
+          this.recursos[index].conversion = "";
+        }
+      } else {
+        this.recursos[index].conversion = "";
+      }
+    },
+
     async crearSolucion() {
       try {
         const recursosParseados = this.recursos.map(recurso => {
@@ -318,7 +342,7 @@ export default {
     limpiarFormulario() {
       this.nombre_solucion = "";
       this.medios_cultivo = "";
-      this.recursos = [{ recurso_id: null, cantidad_usada: "", unidad_medida: "" }];
+      this.recursos = [{ recurso_id: null, cantidad_usada: "", unidad_medida: "", conversion: "" }];
     }
   }
 };
