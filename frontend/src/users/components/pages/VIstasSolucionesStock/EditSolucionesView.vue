@@ -59,6 +59,7 @@
                 type="number"
                 class="form-control"
                 v-model="recurso.cantidad_usada"
+                step="0.00000000000001" 
                 @input="convertirEnTiempoReal(index)"
               />
               <!-- Etiqueta para mostrar la conversión -->
@@ -94,7 +95,7 @@
         <!-- Botón para agregar recurso -->
         <div class="mt-3">
           <button type="button" class="btn btn-success" @click="agregarRecurso">
-           + Agregar Recurso
+            Agregar Recurso
           </button>
         </div>
       </div>
@@ -114,14 +115,13 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SolucionStockService } from '@/users/services/SolucionStockService.js';
-import { useToast } from 'vue-toastification';
 import { RecursoService } from '@/users/services/RecursoService';
+import Swal from 'sweetalert2'; // Importar SweetAlert2
 
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const toast = useToast();
     const solucion = ref({
       medios_cultivo: '',
       nombre_solucion: '',
@@ -141,7 +141,7 @@ export default {
         const response = await SolucionStockService.getWithResources(id);
         solucion.value = response; // Asignar los datos de la solución y sus recursos
 
-        // Actualizar las unidades de medida para cada recurso
+        // Actualizar las unidades de medida y las conversiones para cada recurso
         solucion.value.recursos.forEach((recurso, index) => {
           if (recurso.recurso_id) {
             const recursoSeleccionado = listaRecursos.value.find(
@@ -155,7 +155,11 @@ export default {
         });
       } catch (error) {
         console.error('Error cargando la solución:', error);
-        toast.error('Error al cargar la solución');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar la solución. Por favor, inténtalo de nuevo.',
+        });
       }
     };
 
@@ -170,7 +174,11 @@ export default {
         }));
       } catch (error) {
         console.error('Error cargando los recursos:', error);
-        toast.error('Error al cargar los recursos');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar los recursos. Por favor, inténtalo de nuevo.',
+        });
       }
     };
 
@@ -316,31 +324,56 @@ export default {
     };
 
     const guardarCambios = async () => {
-  try {
-    const id = route.params.id;
+      try {
+        const id = route.params.id;
 
-    // Preparar los datos para enviar al servicio
-    const datosParaEnviar = {
-      medios_cultivo: solucion.value.medios_cultivo,
-      nombre_solucion: solucion.value.nombre_solucion,
-      recursos: solucion.value.recursos.map((recurso) => ({
-        recurso_id: recurso.recurso_id,
-        cantidad_usada: recurso.cantidad_usada,
-        unidad_medida: recurso.unidad_medida,
-      })),
+        // Preparar los datos para enviar al servicio
+        const datosParaEnviar = {
+          medios_cultivo: solucion.value.medios_cultivo,
+          nombre_solucion: solucion.value.nombre_solucion,
+          recursos: solucion.value.recursos.map((recurso) => {
+            const recursoSeleccionado = listaRecursos.value.find(
+              (r) => r.id === recurso.recurso_id
+            );
+            const unidadBase = recursoSeleccionado?.unidad_medida || recurso.unidad_medida;
+
+            // Convertir la cantidad a la unidad base
+            const cantidadConvertida = convertirUnidad(
+              recurso.cantidad_usada,
+              recurso.unidad_medida,
+              unidadBase
+            );
+
+            return {
+              recurso_id: recurso.recurso_id,
+              cantidad_usada: cantidadConvertida,
+              unidad_medida: unidadBase,
+            };
+          }),
+        };
+
+        // Llamar al servicio para actualizar la solución y sus recursos
+        await SolucionStockService.update(id, datosParaEnviar);
+
+        // Mostrar mensaje de éxito en una ventana emergente
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'La solución se ha actualizado correctamente.',
+          confirmButtonText: 'Aceptar',
+        });
+
+        // Redirigir a la lista de soluciones
+        router.push({ name: 'solucioness' });
+      } catch (error) {
+        console.error('Error actualizando la solución:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al actualizar la solución. Por favor, inténtalo de nuevo.',
+        });
+      }
     };
-
-    // Llamar al servicio para actualizar la solución y sus recursos
-    await SolucionStockService.update(id, datosParaEnviar);
-
-    // Mostrar mensaje de éxito y redirigir
-    toast.success('Solución actualizada correctamente');
-    router.push({ name: 'solucioness' });
-  } catch (error) {
-    console.error('Error actualizando la solución:', error);
-    toast.error('Error al actualizar la solución');
-  }
-};
 
     // Función para cancelar la edición
     const cancelarEdicion = () => {
