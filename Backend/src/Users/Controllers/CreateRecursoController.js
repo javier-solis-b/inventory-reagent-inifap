@@ -1,5 +1,5 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\Users\Controllers\CreateRecursoController.js
 import { Recurso } from '../Models/Recursos.js'; // Asegúrate de importar el modelo correcto
-
 
 export const createRecursoController = async (request, response) => {
     const {  catalogo_id, nombre,tipo_recurso, no_inventario, marca, pm, formula, capacidad_r,unidad_medida, lote,fecha_caducidad, recipientes_actuales } = request.body;

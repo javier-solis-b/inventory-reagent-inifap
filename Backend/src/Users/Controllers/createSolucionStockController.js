@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\Users\Controllers\createSolucionStockController.js
 import { SolucionesStock } from '../Models/SolucionesStock.js';
 import { SolucionRecursos } from '../Models/SolucionRecursos.js';
 import { sequelize } from '../../database.js';

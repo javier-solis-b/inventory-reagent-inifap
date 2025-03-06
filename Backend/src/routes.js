@@ -1,4 +1,7 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\routes.js
 import express from 'express';
+import { updateSolucionController } from './auth/Controllers/solucionesController/updateSolucionController.js';
+
 
 //PARA USUARIOS
 import { indexUserController } from './Users/Controllers/indexUserController.js';
@@ -34,6 +37,7 @@ import { showControllerSolucion } from './auth/Controllers/solucionesController/
 
 
 const router = express.Router();
+router.put('/api/v1/soluciones/:id', updateSolucionController);
 router.post('/api/v1/login', loginController);
 // Definir la ruta para obtener una solución por su ID
 router.get('/api/v1/soluciones/:id', showControllerSolucion);

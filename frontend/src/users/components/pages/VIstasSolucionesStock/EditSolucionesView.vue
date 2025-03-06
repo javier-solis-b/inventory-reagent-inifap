@@ -94,7 +94,7 @@
         <!-- Botón para agregar recurso -->
         <div class="mt-3">
           <button type="button" class="btn btn-success" @click="agregarRecurso">
-            Agregar Recurso
+           + Agregar Recurso
           </button>
         </div>
       </div>
@@ -315,18 +315,32 @@ export default {
       return cantidad;
     };
 
-    // Función para guardar los cambios
     const guardarCambios = async () => {
-      try {
-        const id = route.params.id;
-        await SolucionStockService.update(id, solucion.value);
-        toast.success('Solución actualizada correctamente');
-        router.push({ name: 'solucioness' });
-      } catch (error) {
-        console.error('Error actualizando la solución:', error);
-        toast.error('Error al actualizar la solución');
-      }
+  try {
+    const id = route.params.id;
+
+    // Preparar los datos para enviar al servicio
+    const datosParaEnviar = {
+      medios_cultivo: solucion.value.medios_cultivo,
+      nombre_solucion: solucion.value.nombre_solucion,
+      recursos: solucion.value.recursos.map((recurso) => ({
+        recurso_id: recurso.recurso_id,
+        cantidad_usada: recurso.cantidad_usada,
+        unidad_medida: recurso.unidad_medida,
+      })),
     };
+
+    // Llamar al servicio para actualizar la solución y sus recursos
+    await SolucionStockService.update(id, datosParaEnviar);
+
+    // Mostrar mensaje de éxito y redirigir
+    toast.success('Solución actualizada correctamente');
+    router.push({ name: 'solucioness' });
+  } catch (error) {
+    console.error('Error actualizando la solución:', error);
+    toast.error('Error al actualizar la solución');
+  }
+};
 
     // Función para cancelar la edición
     const cancelarEdicion = () => {
