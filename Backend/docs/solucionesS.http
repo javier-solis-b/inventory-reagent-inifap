@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/api/v1/soluciones/16 HTTP/1.1
+DELETE http://localhost:3000/api/v1/soluciones/14 HTTP/1.1

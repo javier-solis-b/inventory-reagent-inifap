@@ -76,7 +76,12 @@
             >
               Editar
             </button>
-            <button class="btn btn-danger me-2">Eliminar</button>
+            <button
+              @click="eliminarSolucion(solucion.id)"
+              class="btn btn-danger me-2"
+            >
+              Eliminar
+            </button>
           </td>
         </tr>
       </tbody>
@@ -89,6 +94,7 @@ import { computed, ref, onMounted } from "vue";
 import { SolucionStockService } from "@/users/services/SolucionStockService.js";
 import { SolucionRecursosService } from "@/users/services/SolucionRecursosService.js";
 import { useToast } from "vue-toastification";
+import Swal from "sweetalert2";
 
 export default {
   setup() {
@@ -124,6 +130,37 @@ export default {
       } catch (error) {
         console.error("Error fetching soluciones with recursos:", error);
         toast.error("Error al cargar las soluciones y recursos");
+      }
+    };
+
+    // Función para eliminar una solución
+    const eliminarSolucion = async (id) => {
+      const confirmacion = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6", // Color del botón "Sí, eliminar"
+        cancelButtonColor: "#d33", // Color del botón "Cancelar"
+       
+        confirmButtonText: '<span style="color:white;">Sí, eliminar</span>',
+        cancelButtonText: '<span style="color:white;">Cancelar</span>',
+        customClass: {
+          confirmButton: "swal2-confirm", // Clase personalizada para el botón "Sí, eliminar"
+          cancelButton: "swal2-cancel", // Clase personalizada para el botón "Cancelar"
+        },
+      });
+
+      if (confirmacion.isConfirmed) {
+        try {
+          await SolucionStockService.delete(id);
+          Swal.fire("¡Eliminado!", "La solución ha sido eliminada.", "success");
+          // Recargar la lista de soluciones después de eliminar
+          fetchSolucionesConRecursos();
+        } catch (error) {
+          console.error("Error al eliminar la solución:", error);
+          Swal.fire("Error", "No se pudo eliminar la solución.", "error");
+        }
       }
     };
 
@@ -205,6 +242,7 @@ export default {
       mediosCultivoUnicos,
       solucionesFiltradas,
       usarSolucion,
+      eliminarSolucion,
       convertirUnidad,
     };
   },
@@ -214,5 +252,11 @@ export default {
 <style scoped>
 .text-color {
   color: #0c934a;
+}
+
+/* Estilos para los botones de SweetAlert2 */
+.swal2-confirm,
+.swal2-cancel {
+  color: white !important; /* Texto en blanco */
 }
 </style>
