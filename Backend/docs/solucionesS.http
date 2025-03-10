@@ -28,3 +28,6 @@ Content-Type: application/json
         { "recurso_id": 72, "cantidad_usada": 25 }  
     ]
 }
+
+###
+DELETE http://localhost:3000/api/v1/soluciones/16 HTTP/1.1

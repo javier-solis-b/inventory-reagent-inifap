@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\auth\Controllers\RecursosControllers\recursoDeleteController.js
 import { Recurso } from "../../../Users/Models/Recursos.js";
 
 export const recursoDeleteController = async (request, response) => {

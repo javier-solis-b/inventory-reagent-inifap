@@ -1,7 +1,7 @@
 //C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\routes.js
 import express from 'express';
 import { updateSolucionController } from './auth/Controllers/solucionesController/updateSolucionController.js';
-
+import { solucionDeleteController } from './auth/Controllers/solucionesController/solucionDeleteController.js';
 
 //PARA USUARIOS
 import { indexUserController } from './Users/Controllers/indexUserController.js';
@@ -52,6 +52,7 @@ router.post('/api/v1/soluciones-stock', createSolucionStockController);
 router.delete('/api/v1/usuarios/:id', tokenMiddleware, deleteController);
 router.delete('/api/v1/recursos/:id', recursoDeleteController);
 router.delete('/api/v1/almacenes/:id', almacenDeleteController);
+router.delete('/api/v1/soluciones/:id', solucionDeleteController);
 //EDITAR
 router.patch('/api/v1/usuarios/:id', tokenMiddleware, updateController);
 router.patch('/api/v1/recursos/:id', tokenMiddleware, recursoUpdateController);
