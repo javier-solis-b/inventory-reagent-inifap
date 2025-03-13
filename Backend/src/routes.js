@@ -1,7 +1,5 @@
 //C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\routes.js
 import express from 'express';
-import { updateSolucionController } from './auth/Controllers/solucionesController/updateSolucionController.js';
-import { solucionDeleteController } from './auth/Controllers/solucionesController/solucionDeleteController.js';
 
 //PARA USUARIOS
 import { indexUserController } from './Users/Controllers/indexUserController.js';
@@ -24,6 +22,9 @@ import { almacenDeleteController } from './auth/Controllers/AlmacenesController/
 import { createAlmacenController } from './Users/Controllers/CreateAlmacenController.js';
 import { almacenUpdateController } from './auth/Controllers/AlmacenesController/almacenUpdateController.js';
 //PARA SOLUCION STOCK
+import { usarSolucionController } from './Users/Controllers/usarSolucionController.js';
+import { updateSolucionController } from './auth/Controllers/solucionesController/updateSolucionController.js';
+import { solucionDeleteController } from './auth/Controllers/solucionesController/solucionDeleteController.js';
 import { createSolucionStockController } from './Users/Controllers/createSolucionStockController.js';
 import { indexSolucionesController } from './Users/Controllers/indexSolucionesController.js';
 import { indexSolucionRecursosController } from './Users/Controllers/indexSolucionRecursosController.js'
@@ -69,4 +70,5 @@ router.get('/api/v1/soluciones-recursos/:id', showSolucionRecursoController);
 router.get('/api/v1/token/verify', verifyTokenController);
 router.get('/api/v1/almacenes', indexAlmacenController);
 router.get('/api/v1/soluciones/:id/recursos', showSolucionRecursoController);
+router.post('/api/v1/soluciones/:solucion_id/usar', usarSolucionController);
 export { router };

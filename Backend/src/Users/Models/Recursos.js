@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\Backend\src\Users\Models\Recursos.js
 import { Sequelize, DataTypes } from "sequelize";
 import { sequelize } from "../../database.js";
 

@@ -31,4 +31,10 @@ export class SolucionStockService {
     const response = await backend.delete(`/soluciones/${id}`);
     return response.data;
   }
+
+  //Usar solucion
+  static async usarSolucion(solucion_id) {
+    const response = await backend.post(`/soluciones/${solucion_id}/usar`);
+    return response.data;
+  }
 }

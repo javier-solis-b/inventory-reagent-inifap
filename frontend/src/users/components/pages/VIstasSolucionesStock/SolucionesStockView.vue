@@ -59,7 +59,7 @@
           </td>
           <td>
             <button
-              @click="usarSolucion(solucion.nombre_solucion)"
+              @click="usarSolucion(solucion.id)"
               class="btn btn-success me-2"
             >
               Usar esta solución
@@ -140,14 +140,13 @@ export default {
         text: "¡No podrás revertir esto!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6", // Color del botón "Sí, eliminar"
-        cancelButtonColor: "#d33", // Color del botón "Cancelar"
-       
-        confirmButtonText: '<span style="color:white;">Sí, eliminar</span>',
-        cancelButtonText: '<span style="color:white;">Cancelar</span>',
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
         customClass: {
-          confirmButton: "swal2-confirm", // Clase personalizada para el botón "Sí, eliminar"
-          cancelButton: "swal2-cancel", // Clase personalizada para el botón "Cancelar"
+          confirmButton: "swal2-confirm",
+          cancelButton: "swal2-cancel",
         },
       });
 
@@ -160,6 +159,36 @@ export default {
         } catch (error) {
           console.error("Error al eliminar la solución:", error);
           Swal.fire("Error", "No se pudo eliminar la solución.", "error");
+        }
+      }
+    };
+
+    // Función para usar una solución
+    const usarSolucion = async (solucion_id) => {
+      const confirmacion = await Swal.fire({
+        title: "¿Usar esta solución?",
+        text: "¿Estás seguro de que deseas usar esta solución?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, usar",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          confirmButton: "swal2-confirm",
+          cancelButton: "swal2-cancel",
+        },
+      });
+
+      if (confirmacion.isConfirmed) {
+        try {
+          await SolucionStockService.usarSolucion(solucion_id);
+          Swal.fire("¡Éxito!", "La solución ha sido usada correctamente.", "success");
+          // Recargar la lista de soluciones si es necesario
+          fetchSolucionesConRecursos();
+        } catch (error) {
+          console.error("Error al usar la solución:", error);
+          Swal.fire("Error", "No se pudo usar la solución.", "error");
         }
       }
     };
@@ -178,17 +207,6 @@ export default {
         return nombreMatch && medioMatch;
       });
     });
-
-    // Función para usar una solución
-    const usarSolucion = async (nombreSolucion) => {
-      try {
-        await SolucionStockService.actualizarInventario(nombreSolucion);
-        toast.success(`Solución "${nombreSolucion}" usada correctamente`);
-      } catch (error) {
-        console.error("Error al usar la solución:", error);
-        toast.error("Error al usar la solución");
-      }
-    };
 
     // Cargar datos al montar el componente
     onMounted(fetchSolucionesConRecursos);
