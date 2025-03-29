@@ -181,15 +181,8 @@ export default {
       });
 
       if (confirmacion.isConfirmed) {
-        try {
-          await SolucionStockService.usarSolucion(solucion_id);
+      await SolucionStockService.usarSolucion(solucion_id);
           Swal.fire("¡Éxito!", "La solución ha sido usada correctamente.", "success");
-          // Recargar la lista de soluciones si es necesario
-          fetchSolucionesConRecursos();
-        } catch (error) {
-          console.error("Error al usar la solución:", error);
-          Swal.fire("Error", "No se pudo usar la solución.", "error");
-        }
       }
     };
 

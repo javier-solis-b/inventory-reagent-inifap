@@ -2,7 +2,7 @@
   <div>
     <h3 class="fw-bold mb-0 text-color" style="color: #0c934a">Inventario</h3>
     <br />
-    <!-- Filtro y selector para abrir el formulario flotante de agregación -->
+    <!-- Filtro y selector -->
     <div class="mb-3 d-flex align-items-center">
       <input
         v-model="buscarPor"
@@ -38,7 +38,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(resource, index) in resultadosBusqueda" :key="index" :class="{ 'table-danger': resource.capacidad_r === 0 || resource.recipientes_actuales === 0 }">
+        <tr 
+          v-for="(resource, index) in resultadosBusqueda" 
+          :key="index" 
+          :class="{ 
+            'table-danger': resource.capacidad_r <= 0 || resource.recipientes_actuales <= 0,
+            'table-warning': resource.capacidad_r > 0 && resource.capacidad_r < 5 // Opcional: alerta para bajos niveles
+          }"
+        >
           <td>{{ resource.id }}</td>
           <td>{{ resource.almacen || "-" }}</td>
           <td>{{ resource.no_inventario }}</td>
@@ -50,33 +57,26 @@
               {{ resource.capacidad_r }} {{ resource.unidad_medida }}
               <div class="d-flex ms-2 align-items-center">
                 <input
-                  v-model.number="resource.cantidad"
+                  v-model.number="resource.cantidadInput"
                   type="number"
+                  min="0"
+                  step="0.01"
                   class="form-control form-control-sm me-2"
                   placeholder="Cantidad"
                   style="width: 90px"
+                  :class="{ 'is-invalid': resource.cantidadInput < 0 }"
                 />
                 <button
-                  @click="
-                    actualizarCapacidad(
-                      resource.id,
-                      resource.cantidad,
-                      'agregar'
-                    )
-                  "
+                  @click="actualizarCantidad(resource.id, 'sumar')"
                   class="btn btn-success btn-sm me-1"
+                  :disabled="resource.cantidadInput <= 0"
                 >
                   +
                 </button>
                 <button
-                  @click="
-                    actualizarCapacidad(
-                      resource.id,
-                      resource.cantidad,
-                      'quitar'
-                    )
-                  "
+                  @click="actualizarCantidad(resource.id, 'restar')"
                   class="btn btn-danger btn-sm"
+                  :disabled="resource.cantidadInput <= 0"
                 >
                   -
                 </button>
@@ -88,14 +88,15 @@
               {{ resource.recipientes_actuales || "-" }}
               <div class="d-flex ms-2 align-items-center">
                 <button
-                  @click="confirmarAccionRecipiente(resource.id, 'agregar')"
+                  @click="actualizarRecipientes(resource.id, 'agregar')"
                   class="btn btn-success btn-sm me-1"
                 >
                   +
                 </button>
                 <button
-                  @click="confirmarAccionRecipiente(resource.id, 'quitar')"
+                  @click="actualizarRecipientes(resource.id, 'quitar')"
                   class="btn btn-danger btn-sm"
+                  :disabled="resource.recipientes_actuales <= 0"
                 >
                   -
                 </button>
@@ -106,10 +107,8 @@
         </tr>
       </tbody>
     </table>
-    <!-- Resultados de búsqueda -->
     <p v-if="resultadosBusqueda.length > 0" class="mt-3">
-      Resultados de búsqueda: {{ resultadosBusqueda.length }} recursos
-      encontrados.
+      Resultados de búsqueda: {{ resultadosBusqueda.length }} recursos encontrados.
     </p>
   </div>
 </template>
@@ -125,230 +124,171 @@ export default {
       recursos: [],
       buscarPor: "",
       filtroSeleccionado: "todos",
-      resultadosBusqueda: [],
-      cantidad: 0,
+      resultadosBusqueda: []
     };
   },
   setup() {
     const isAdmin = computed(() => localStorage.getItem("isAdmin") === "true");
-
-    return {
-      isAdmin,
-    };
+    return { isAdmin };
   },
   async mounted() {
-    try {
-      const recursos = await RecursoService.all();
-      this.recursos = recursos.map((resource) => ({
-        ...resource,
-        cantidad: 0,
-      }));
-      this.resultadosBusqueda = this.recursos;
-    } catch (error) {
-      console.error("Error al cargar recursos:", error);
-      alert(
-        "Ha ocurrido un error al cargar los recursos. Por favor, inténtelo nuevamente."
-      );
-    }
+    await this.cargarRecursos();
   },
   methods: {
-    async verificarSuficienteInventario(id, cantidad, accion) {
-    const updatedRecurso = this.resultadosBusqueda.find(res => res.id === id);
-    if (!updatedRecurso) {
-      console.error(`Recurso con ID ${id} no encontrado`);
-      return false;
-    }
-
-    if (accion === 'quitar' && cantidad > 0) {
-      if (cantidad > updatedRecurso.capacidad_r) {
-        alert("No se puede quitar más de la cantidad disponible.");
-        return false;
-      }
-    }
-
-    return true;
-  },
-    async actualizarInventario(id, campo, valor) {
+    async cargarRecursos() {
       try {
-        console.log(`Enviando solicitud para actualizar recurso con ID ${id}`);
-        console.log(`Datos enviados:`, { [campo]: valor }); // Realiza la solicitud al servidor
-        const response = await backend.patch(`/recursos/${id}`, {
-          [campo]: valor,
-        }); // Verifica la respuesta del servidor
-        if (response.status === 200) {
-          console.log(
-            `Actualizado campo "${campo}" del recurso con ID ${id} en el backend.`
-          );
-          alert("Inventario actualizado exitosamente.");
-        } else {
-          throw new Error(
-            `Error en la respuesta del servidor: ${response.statusText}`
-          );
-        }
+        const recursos = await RecursoService.all();
+        this.recursos = recursos.map(resource => ({
+          ...resource,
+          cantidadInput: 0,
+          recipientes_actuales: resource.recipientes_actuales || 0,
+          capacidad_r: resource.capacidad_r || 0
+        }));
+        this.resultadosBusqueda = [...this.recursos];
       } catch (error) {
-        console.error(
-          `Error al actualizar campo "${campo}" del recurso con ID ${id}:`,
-          error
-        );
-        alert(
-          `Error al actualizar campo "${campo}" del recurso con ID ${id}: ${error.message}`
-        );
+        console.error("Error al cargar recursos:", error);
+        alert("Error al cargar los recursos. Por favor, inténtelo nuevamente.");
       }
     },
 
-    async actualizarCapacidad(id, cantidad, accion) {
-      cantidad = Number(cantidad);
+    async actualizarCantidad(id, accion) {
+      const recurso = this.resultadosBusqueda.find(r => r.id === id);
+      if (!recurso) {
+        console.error("Recurso no encontrado");
+        return;
+      }
+
+      const cantidad = Number(recurso.cantidadInput);
+      
+      // Validaciones
+      if (isNaN(cantidad)) {
+        alert("Por favor ingrese un número válido");
+        return;
+      }
+
       if (cantidad <= 0) {
-        alert("Por favor, ingresa una cantidad válida.");
+        alert("La cantidad debe ser mayor que cero");
+        return;
+      }
+
+      if (accion === "restar" && cantidad > recurso.capacidad_r) {
+        alert(`No puede quitar ${cantidad} porque solo hay ${recurso.capacidad_r} en stock`);
         return;
       }
 
       try {
-        const response = await backend.post(`/recursos/${id}/update-capacity`, {
-          cantidad,
-          accion,
+        // Calcular nueva cantidad
+        const nuevaCantidad = accion === "sumar" 
+          ? recurso.capacidad_r + cantidad 
+          : recurso.capacidad_r - cantidad;
+
+        // Actualizar backend
+        const response = await backend.patch(`/recursos/${id}`, {
+          capacidad_r: nuevaCantidad
         });
 
         if (response.status === 200) {
-          const updatedRecurso = this.resultadosBusqueda.find(
-            (res) => res.id === id
-          );
-          if (!updatedRecurso) {
-            console.error(`Recurso con ID ${id} no encontrado`);
-            return;
-          }
-
-          if (accion === "agregar") {
-            updatedRecurso.capacidad_r += cantidad;
-          } else if (accion === "quitar") {
-            if (updatedRecurso.capacidad_r - cantidad < 0) {
-              alert("No se puede quitar más de la cantidad disponible.");
-              return;
-            }
-            updatedRecurso.capacidad_r -= cantidad;
-          }
-
-          // Actualizar el inventario en la base de datos
-          await this.actualizarInventario(
-            id,
-            "capacidad_r",
-            updatedRecurso.capacidad_r
-          );
-
-          // Actualizar el servicio con los cambios
-          this.recursos = await RecursoService.all();
-          this.resultadosBusqueda = this.recursos;
+          // Actualizar frontend
+          recurso.capacidad_r = nuevaCantidad;
+          recurso.cantidadInput = 0;
+          
+          // Mostrar feedback
+          const action = accion === "sumar" ? "añadido" : "quitado";
+          alert(`Se ha ${action} ${cantidad} ${recurso.unidad_medida} correctamente. Stock actual: ${nuevaCantidad}`);
         } else {
-          throw new Error(
-            `Error al actualizar capacidad: ${response.statusText}`
-          );
+          throw new Error("Error al actualizar en el servidor");
         }
       } catch (error) {
-        console.error("Error al actualizar capacidad:", error);
-        alert("Error al actualizar la capacidad del recurso");
+        console.error("Error al actualizar cantidad:", error);
+        alert("Error al actualizar la cantidad. Por favor, inténtelo nuevamente.");
       }
     },
 
-    async confirmarAccionRecipiente(id, accion) {
-      const mensaje =
-        accion === "agregar"
-          ? "¿Estás seguro de que quieres agregar un nuevo recipiente?"
-          : "¿Estás seguro de que quieres quitar un recipiente?";
+    async actualizarRecipientes(id, accion) {
+      const recurso = this.resultadosBusqueda.find(r => r.id === id);
+      if (!recurso) {
+        console.error("Recurso no encontrado");
+        return;
+      }
 
-      if (confirm(mensaje)) {
-        try {
-          const response = await backend.post(
-            `/recursos/${id}/update-recipientes`,
-            { accion }
-          );
+      // Validar antes de quitar
+      if (accion === "quitar" && recurso.recipientes_actuales <= 0) {
+        alert("No hay recipientes para quitar");
+        return;
+      }
 
-          if (response.status === 200) {
-            const updatedRecurso = this.resultadosBusqueda.find(
-              (res) => res.id === id
-            );
-            if (!updatedRecurso) {
-              console.error(`Recurso con ID ${id} no encontrado`);
-              return;
-            }
+      const confirmacion = confirm(`¿Está seguro que desea ${accion === 'agregar' ? 'agregar' : 'quitar'} un recipiente?`);
+      if (!confirmacion) return;
 
-            if (accion === "agregar") {
-              updatedRecurso.recipientes_actuales++;
-            } else if (
-              accion === "quitar" &&
-              updatedRecurso.recipientes_actuales > 0
-            ) {
-              updatedRecurso.recipientes_actuales--;
-            } else {
-              alert("No se puede quitar más recipientes.");
-              return;
-            }
+      try {
+        // Calcular nuevo total
+        const nuevosRecipientes = accion === "agregar" 
+          ? recurso.recipientes_actuales + 1 
+          : recurso.recipientes_actuales - 1;
 
-            // Actualizar el inventario en la base de datos
-            await this.actualizarInventario(
-              id,
-              "recipientes_actuales",
-              updatedRecurso.recipientes_actuales
-            );
+        // Actualizar backend
+        const response = await backend.patch(`/recursos/${id}`, {
+          recipientes_actuales: nuevosRecipientes
+        });
 
-            // Actualizar el servicio con los cambios
-            this.recursos = await RecursoService.all();
-            this.resultadosBusqueda = this.recursos;
-          } else {
-            throw new Error(
-              `Error al actualizar recipientes: ${response.statusText}`
-            );
-          }
-        } catch (error) {
-          console.error("Error al actualizar recipientes:", error);
-          alert("Error al actualizar el número de recipientes del recurso");
+        if (response.status === 200) {
+          // Actualizar frontend
+          recurso.recipientes_actuales = nuevosRecipientes;
+          alert(`Recipientes actualizados. Total: ${nuevosRecipientes}`);
+        } else {
+          throw new Error("Error al actualizar en el servidor");
         }
+      } catch (error) {
+        console.error("Error al actualizar recipientes:", error);
+        alert("Error al actualizar los recipientes. Por favor, inténtelo nuevamente.");
       }
     },
 
     buscarPorNombre() {
       if (this.buscarPor.trim()) {
-        this.resultadosBusqueda = this.recursos.filter((resource) =>
+        this.resultadosBusqueda = this.recursos.filter(resource =>
           resource.nombre.toLowerCase().includes(this.buscarPor.toLowerCase())
         );
       } else {
-        this.resultadosBusqueda = this.recursos;
+        this.resultadosBusqueda = [...this.recursos];
       }
-      this.filtrarRecursos();
     },
 
     filtrarRecursos() {
       if (this.filtroSeleccionado === "todos") {
-        this.resultadosBusqueda = this.recursos.filter((resource) =>
-          resource.nombre.toLowerCase().includes(this.buscarPor.toLowerCase())
-        );
+        this.buscarPorNombre();
       } else {
         this.resultadosBusqueda = this.recursos.filter(
-          (resource) =>
+          resource =>
             resource.tipo_recurso.toLowerCase() === this.filtroSeleccionado &&
             resource.nombre.toLowerCase().includes(this.buscarPor.toLowerCase())
         );
       }
-    },
+    }
   },
   watch: {
-    buscarPor: {
-      handler() {
-        this.buscarPorNombre();
-      },
-      immediate: true,
+    buscarPor() {
+      this.buscarPorNombre();
     },
-    filtroSeleccionado: {
-      handler() {
-        this.filtrarRecursos();
-      },
-      immediate: true,
-    },
-  },
+    filtroSeleccionado() {
+      this.filtrarRecursos();
+    }
+  }
 };
 </script>
 
 <style scoped>
 /* Estilos para el formulario flotante */
+.table-danger {
+  background-color: #f8d7da !important;
+}
+.table-warning {
+  background-color: #fff3cd !important;
+}
+.is-invalid {
+  border-color: #dc3545;
+}
+
 .agregacion-form-overlay {
   position: fixed;
   top: 0;
