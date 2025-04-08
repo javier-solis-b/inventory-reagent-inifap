@@ -34,7 +34,15 @@ export class SolucionStockService {
 
   //Usar solucion
   static async usarSolucion(solucion_id) {
-    const response = await backend.post(`/soluciones/${solucion_id}/usar`);
-    return response.data;
+    try {
+      const response = await backend.post(`/soluciones/${solucion_id}/usar`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Esto es para el caso de recursos insuficientes
+        throw error.response.data;
+      }
+      throw error;
+    }
   }
 }

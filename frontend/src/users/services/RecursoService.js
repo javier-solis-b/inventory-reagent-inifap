@@ -1,3 +1,4 @@
+//C:\Users\javis\OneDrive\Documentos\inventory-reagents-inifap\frontend\src\users\services\RecursoService.js
 import backend from '@/backend';
 import { AlmacenService } from './AlmacenService'; // Asegúrate de importar correctamente
 
