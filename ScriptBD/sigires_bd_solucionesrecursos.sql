@@ -36,6 +36,16 @@ CREATE TABLE `solucionesrecursos` (
   CONSTRAINT `solucionesrecursos_ibfk_2` FOREIGN KEY (`recurso_id`) REFERENCES `recursos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `solucionesrecursos`
+--
+
+LOCK TABLES `solucionesrecursos` WRITE;
+/*!40000 ALTER TABLE `solucionesrecursos` DISABLE KEYS */;
+INSERT INTO `solucionesrecursos` VALUES (48,2,70,15),(49,2,71,25),(50,2,72,25),(97,20,70,2),(98,21,73,6),(99,21,74,2000),(111,3,70,1.5),(113,19,68,0.402),(114,1,71,90),(115,22,68,0.009000000000000001);
+/*!40000 ALTER TABLE `solucionesrecursos` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -46,4 +56,4 @@ CREATE TABLE `solucionesrecursos` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-07 21:06:26
+-- Dump completed on 2025-04-22 23:30:02

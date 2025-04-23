@@ -33,6 +33,16 @@ CREATE TABLE `users` (
   UNIQUE KEY `name` (`name`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('38610d60-2f66-4f1b-bfaf-d5f3b8aa184c','user','$2b$10$gZU9oESspjQKv7FGda8BW.M6HD2CIgClEMMa0UYwhirG9WiJDt/BW',0),('737bb5d7-f815-49b6-9869-e1c377575230','Paola culebro','$2b$10$XlT6610mqCBz3Ku39Di2seQSjLcJhe06t8eqy1NwJRFTWCHrHChLG',1),('93afc839-8827-4002-a9a0-a4cc4bc6c268','admin1','$2b$10$JKjvud9Z9Fq7GqQDuew/LukvqKdTM8MsQ1lkn5Yx0r0XGDrBTC2Ia',1),('c6e77326-975c-4eea-9e72-909c2014e617','javier solis','$2b$10$9qgkuJdxQ1q7RX4ZkI8vTeQJLX.uKyJ/LTFjgJ0yCwoTCYyQHpRYu',1),('cd4e8139-5550-4363-8f26-4cdbd4ad53f2','saidi','$2b$10$nI71AUeId4JHRq5gxkx33eK4ca6JLssSpajF6yxru4Hpr0cD4XFUy',1),('efc776e3-edf4-4fa8-94f9-8c2e39e92731','admin','$2b$10$0JJxmnzK2nffr34h5Xyuv.3nK089Sk7lrF64YT2vf7RB/qr6CLx0C',1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -43,4 +53,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-07 21:06:27
+-- Dump completed on 2025-04-22 23:30:03

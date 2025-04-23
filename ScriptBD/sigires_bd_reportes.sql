@@ -38,6 +38,15 @@ CREATE TABLE `reportes` (
   CONSTRAINT `reportes_ibfk_2` FOREIGN KEY (`recurso_id`) REFERENCES `recursos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reportes`
+--
+
+LOCK TABLES `reportes` WRITE;
+/*!40000 ALTER TABLE `reportes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reportes` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -48,4 +57,4 @@ CREATE TABLE `reportes` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-07 21:06:27
+-- Dump completed on 2025-04-22 23:30:02
