@@ -56,7 +56,7 @@
                 v-model="recurso.cantidad_usada"
                 label="Cantidad Usada"
                 type="number"
-                step="0.01"
+                step="0.00000000000001" 
                 prepend-icon="mdi-measurement-variant"
                 required
                 @input="convertirEnTiempoReal(index)"
@@ -328,6 +328,9 @@ export default {
           title: "Solución creada con éxito",
           confirmButtonText: '<span style="color:white;">OK</span>'
         });
+
+        // Redirigir al usuario a '/solucioness' después de crear la solución con éxito
+        this.$router.push('/solucioness');
       } catch (error) {
         console.error("Error al crear la solución:", error);
         Swal.fire({

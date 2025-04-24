@@ -65,6 +65,7 @@
               Usar esta solución
             </button>
             <button
+            v-if="isAdmin"
               @click="
                 $router.push({
                   name: 'soluciones.edit',
@@ -77,6 +78,7 @@
               Editar
             </button>
             <button
+            v-if="isAdmin"
               @click="eliminarSolucion(solucion.id)"
               class="btn btn-danger me-2"
             >
@@ -189,7 +191,7 @@ export default {
       Swal.fire({
         title: "No se puede usar la solución",
         html: `<strong>${error.message}</strong><br>
-               Disponible: ${error.disponible} ${error.unidad_medida || ''}<br>
+               <br>
                Requerido: ${error.requerido} ${error.unidad_medida || ''}`,
         icon: "error",
       });
