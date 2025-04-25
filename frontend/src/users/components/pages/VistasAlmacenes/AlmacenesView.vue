@@ -191,7 +191,7 @@ export default {
         Swal.fire({
           icon: "error",
           title: "Error al eliminar recurso",
-          text: "Ha ocurrido un error al intentar eliminar el recurso.",
+          text: "No se puede eliminar el Almacen porque contiene recursos. se recomienda eliminar los recursos que contiene o cambiarlos de almacén.",
         });
       }
     },

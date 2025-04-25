@@ -65,7 +65,7 @@
               Usar esta solución
             </button>
             <button
-            v-if="isAdmin"
+              v-if="isAdmin"
               @click="
                 $router.push({
                   name: 'soluciones.edit',
@@ -78,7 +78,7 @@
               Editar
             </button>
             <button
-            v-if="isAdmin"
+              v-if="isAdmin"
               @click="eliminarSolucion(solucion.id)"
               class="btn btn-danger me-2"
             >
@@ -167,41 +167,45 @@ export default {
 
     // Función para usar una solución
     const usarSolucion = async (solucion_id) => {
-  try {
-    const confirmacion = await Swal.fire({
-      title: "¿Usar esta solución?",
-      text: "¿Estás seguro de que deseas usar esta solución?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, usar",
-      cancelButtonText: "Cancelar",
-    });
+      try {
+        const confirmacion = await Swal.fire({
+          title: "¿Usar esta solución?",
+          text: "¿Estás seguro de que deseas usar esta solución?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, usar",
+          cancelButtonText: "Cancelar",
+        });
 
-    if (confirmacion.isConfirmed) {
-      await SolucionStockService.usarSolucion(solucion_id);
-      Swal.fire("¡Éxito!", "La solución ha sido usada correctamente.", "success");
-      // Recargar datos si es necesario
-      fetchSolucionesConRecursos();
-    }
-  } catch (error) {
-    if (error.message) {
-      // Error de recursos insuficientes
-      Swal.fire({
-        title: "No se puede usar la solución",
-        html: `<strong>${error.message}</strong><br>
+        if (confirmacion.isConfirmed) {
+          await SolucionStockService.usarSolucion(solucion_id);
+          Swal.fire(
+            "¡Éxito!",
+            "La solución ha sido usada correctamente.",
+            "success"
+          );
+          // Recargar datos si es necesario
+          fetchSolucionesConRecursos();
+        }
+      } catch (error) {
+        if (error.message) {
+          // Error de recursos insuficientes
+          Swal.fire({
+            title: "No se puede usar la solución",
+            html: `<strong>${error.message}</strong><br>
                <br>
-               Requerido: ${error.requerido} ${error.unidad_medida || ''}`,
-        icon: "error",
-      });
-    } else {
-      // Otros errores
-      Swal.fire("Error", "Ocurrió un error al usar la solución.", "error");
-      console.error("Error al usar solución:", error);
-    }
-  }
-};
+               Requerido: ${error.requerido} ${error.unidad_medida || ""}`,
+            icon: "error",
+          });
+        } else {
+          // Otros errores
+          Swal.fire("Error", "Ocurrió un error al usar la solución.", "error");
+          console.error("Error al usar solución:", error);
+        }
+      }
+    };
 
     // Filtrar soluciones por nombre y medio de cultivo
     const solucionesFiltradas = computed(() => {
